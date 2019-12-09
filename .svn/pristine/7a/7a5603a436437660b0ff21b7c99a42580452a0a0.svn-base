@@ -1,0 +1,14 @@
+.product-block{text-align:center;padding-bottom:0.8%;background-color:#FFFFFF;}  
+a.Thoughtful {color:rgb(34, 45, 187);}
+a.Thoughtful:hover{color:#f4511e !important;}
+a.Thoughtful:focus{color:black;}
+
+a:hover{outline: dotted 1px #000;text-decoration: none;}
+.hotel-left {float: left;width: 50%;background: rgba(0,0,0,.5); padding: 3em 3em 0;height: 831px;}
+.red {color: red;}
+.text-black {color: #000;}
+.summary {
+    margin-top: 40px;
+    min-height: 300px;
+    padding: 40px 45px;
+}

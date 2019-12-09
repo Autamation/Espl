@@ -1,0 +1,723 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE HTML>
+<!--[if lt IE 8]><html class="no-js oldIE" lang="en-US"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en-US"><![endif]-->
+<!--[if IE 9]><html class="no-js ie9" lang="en-US"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>signup</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+	rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script
+	src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/static/js/alert.js"></script>
+<link href="${pageContext.request.contextPath}/static/css/alert.css"
+	rel="stylesheet">
+
+<style type="text/css">
+/*custom css stylesheet*/
+.agree{color:black;}
+.colorgraph {
+	height: 5px;
+	border-top: 0;
+	background: #c4e17f;
+	border-radius: 5px;
+	background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%,
+		#f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%,
+		#db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%,
+		#669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%,
+		#f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%,
+		#db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%,
+		#669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca
+		25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe
+		50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1
+		87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca
+		25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe
+		50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1
+		87.5%, #62c2e4 87.5%, #62c2e4);
+}
+
+/* Global stylesheet */
+@import
+	url('http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic')
+	; /* Google Lato Web Font */
+
+/* Global Text Styles */
+body, html {
+	width: 100%;
+	height: 100%;
+	font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6, th, b, strong {
+	font-weight: 700;
+}
+
+.lead, .panel-heading {
+	font-size: 16px;
+	font-weight: 400;
+}
+
+/* Padding for navbar */
+
+/* Colorgraph divider */
+.colorgraph {
+	height: 5px;
+	border-top: 0;
+	background: #c4e17f;
+	border-radius: 5px;
+	background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%,
+		#f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%,
+		#db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%,
+		#669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%,
+		#f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%,
+		#db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%,
+		#669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca
+		25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe
+		50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1
+		87.5%, #62c2e4 87.5%, #62c2e4);
+	background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca
+		25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe
+		50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1
+		87.5%, #62c2e4 87.5%, #62c2e4);
+}
+
+.colorgraph-header {
+	position: absolute;
+	top: 0;
+	margin: 0;
+	height: 3px;
+	z-index: 100;
+}
+
+.colorgraph-footer {
+	position: static;
+	bottom: 0;
+	margin: 0;
+	height: 5px;
+	z-index: 100;
+}
+
+footer {
+	padding: 10px 0;
+	background-color: #f8f8f8;
+	position: relative;
+	bottom: 0;
+	width: 100%;
+}
+
+p.copyright {
+	margin: 15px 0 0;
+}
+
+.colorgraph-footer {
+	position: fixed;
+}
+
+.form-row {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+@media ( max-width :768px) {
+	.btn {
+		margin-bottom: 10px;
+	}
+	footer, .colorgraph-footer {
+		position: static;
+	}
+}
+
+.navbar-brand {
+	margin-top: -10px;
+	margin-left: -10px;
+}
+
+.log-wrapper {
+	
+}
+
+.log-wrapper .navbar-default {
+	border: 0;
+}
+
+.log-wrapper .navbar {
+	background: #000;
+	margin-bottom: 0;
+}
+
+.log-wrapper .log-holder {
+	position: relative;
+	clear: both;
+	
+}
+
+.log-wrapper .log-gray {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	
+}
+
+.log-wrapper .navbar-default .navbar-nav>li>a {
+	color: #eee;
+}
+
+.log-wrapper h2 {
+	color: #00d0ff;
+	margin-top: 50px;
+	margin-bottom: 0;
+}
+
+.log-wrapper h2 small {
+	color: #fff;
+	font-size: 50%;
+}
+
+.log-wrapper .colorgraph {
+	height: 5px;
+}
+
+.log-wrapper .form-group label, .agree {
+	color: #ddd;
+}
+
+.agree a {
+	color: #eee;
+}
+
+.agree a:hover {
+	color: #fff;
+}
+
+.log-wrapper .form-group.gender {
+	color: #fff;
+	font-size: 16px;
+	margin-top: 13px;
+}
+
+.log-wrapper .form-group.gender input[type="radio"] {
+	margin-left: 30px;
+	color:black;
+}
+
+.log-wrapper .form-control {
+	border-color: #333;
+}
+
+.loader-div {
+	margin: -130px 0 0 38%;
+	border-radius: 4px; /* margin: 290px 0 0 50%; */
+	display: none;
+	opacity: 1.0;
+	position: relative;
+}
+.sign-in-box{border:1px solid black;border-radius: 3px; box-shadow: 6px 4px #grey; }
+</style>
+<script>
+	function redirectLogin() {
+		window.location.href = "login.html";
+	}
+</script>
+
+</head>
+<body>
+
+	<div class="log-wrapper">
+		<%-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<hr class="colorgraph colorgraph-header">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#main-navbar-collapse">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand"
+						href="${pageContext.request.contextPath}/index.html"><img
+						src="${pageContext.request.contextPath}/static/Images/equalitylabblue.png"
+						alt="Go to Equality Home!" width="200" height="42" border="0"></a>
+
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="main-navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="${pageContext.request.contextPath}/index.html"><i
+								class="glyphicon glyphicon-arrow-left"></i> Back to Home</a></li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+			<!-- /.container -->
+		</nav> --%>
+		<jsp:include page="header.jsp"></jsp:include>
+
+		<div class="log-holder">
+			<span class="log-gray"></span>
+			<div class="container">
+				<div class="row">
+					<div
+						class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 sign-in-box">
+						<form role="form" action="#" method="post">
+							<h2    style="color: #3366FF;">
+								Please Sign Up <small  style="color: #3366FF;">It's free and always will be.</small>
+							</h2>
+							<br>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group">
+										<input type="text" name="regFirstName" id="regFirstName"
+											class="form-control input-lg" placeholder="First Name"
+											tabindex="1" required>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group">
+										<input type="text" name="regLastName" id="regLastName"
+											class="form-control input-lg" placeholder="Last Name"
+											tabindex="2" required>
+									</div>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<input type="email" name="regEmail" id="regEmail"
+									class="form-control input-lg validate"
+									placeholder="Email Address" tabindex="4" required>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group">
+										<input type="password" name="regPassword" id="regPassword"
+											class="form-control input-lg" placeholder="Password"
+											tabindex="5" required>
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group">
+										<input type="password" name="confirmPassword"
+											id="confirmPassword" class="form-control input-lg"
+											placeholder="Confirm Password" tabindex="6">
+									</div>
+								</div>
+
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group">
+										<input type="text" name="contactNumber" id="contactNumber"
+											maxlength="10" pattern="[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}"
+											class="form-control input-lg" placeholder="Mobile No"
+											tabindex="7">
+									</div>
+								</div>
+								<div class="col-xs-12 col-sm-6 col-md-6">
+									<div class="form-group gender">
+										<label style="color:black;">Gender</label> 
+										<input type="radio" name="gender" class="input"  value="1" checked="checked"/><label style="color:black;">Male</label> 
+										<input type="radio" name="gender" class="input"	 value="0"><label style="color:black;">Female</label> 
+									</div>
+								</div>
+							</div>
+
+
+							<div class="row">
+								<div class="col-xs-4 col-sm-3 col-md-3">
+									<span class="button-checkbox">
+										<button type="button" class="btn" data-color="info"
+											tabindex="7">I Agree</button> <input type="checkbox"
+										name="t_and_c" id="t_and_c" class="hidden" value="1">
+									</span>
+								</div>
+								<div class="col-xs-8 col-sm-9 col-md-9 agree" style="color:black">
+									By clicking <strong>Register</strong>,
+									you agree to the <a href="javascript:void(0);"
+										data-toggle="modal" data-target="#t_and_c_m" style="color:black">Terms and
+										Conditions</a> set out by this site, including our Cookie Use.
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label id="registerValidationMessage" style="color: red;" />
+							</div>
+							
+							<div class="row">
+								<div class="col-xs-12 col-md-6">
+									<input type="submit" value="Register" id="registerSubmit"
+										name="registerSubmit" class="btn btn-primary btn-block btn-lg"
+										tabindex="7">
+								</div>
+								<div class="col-xs-12 col-md-6">
+									<a href="login.html" class="btn btn-success btn-block btn-lg">Sign
+										In</a>
+								</div>
+							</div><br>
+						</form>
+					</div><br><br>
+				</div>
+				<div style="text-align: center; color: red">
+					<br /> <b>
+						<p id="emailExists"></p>
+					</b>
+				</div>
+
+				<div class="modal fade" id="t_and_c_m" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">�</button>
+								<h4 class="modal-title" id="myModalLabel">Terms &
+									Conditions</h4>
+							</div>
+							<!--<div class="modal-body">
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique, itaque, modi, aliquam nostrum at sapiente consequuntur natus odio reiciendis perferendis rem nisi tempore possimus ipsa porro delectus quidem dolorem ad.</p>
+                			</div>-->
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary"
+									data-dismiss="modal">I Agree</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<jsp:include page="footer.jsp"></jsp:include>
+
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content close-button-div">
+			<span class="close">&times;</span>
+		</div>
+		<div class="modal-content content-div"
+			style="font-size: 1.5rem; background-color: #ffffff;">
+			<p>User successfully registered. We have sent you have mail,
+				please verify the email address and proceed for login</p>
+			<input type="button" class="btn btn-default"
+				value="Click Here to Proceed" onclick="redirectLogin();">
+		</div>
+	</div>
+
+	<div class="loader-div">
+		<img src="${pageContext.request.contextPath}/static/Images/35.gif"
+			width="45" height="45">
+	</div>
+	
+	<script type="text/javascript">
+		$(function() {
+			$('.button-checkbox')
+					.each(
+							function() {
+
+								// Settings
+								var $widget = $(this), $button = $widget
+										.find('button'), $checkbox = $widget
+										.find('input:checkbox'), color = $button
+										.data('color'), settings = {
+									on : {
+										icon : 'glyphicon glyphicon-check'
+									},
+									off : {
+										icon : 'glyphicon glyphicon-unchecked'
+									}
+								};
+
+								// Event Handlers
+								$button.on('click', function() {
+									$checkbox.prop('checked', !$checkbox
+											.is(':checked'));
+									$checkbox.triggerHandler('change');
+									updateDisplay();
+								});
+								$checkbox.on('change', function() {
+									updateDisplay();
+								});
+
+								// Actions
+								function updateDisplay() {
+									var isChecked = $checkbox.is(':checked');
+
+									// Set the button's state
+									$button.data('state', (isChecked) ? "on"
+											: "off");
+
+									// Set the button's icon
+									$button
+											.find('.state-icon')
+											.removeClass()
+											.addClass(
+													'state-icon '
+															+ settings[$button
+																	.data('state')].icon);
+
+									// Update the button's color
+									if (isChecked) {
+										$button.removeClass('btn-default')
+												.addClass(
+														'btn-' + color
+																+ ' active');
+									} else {
+										$button.removeClass(
+												'btn-' + color + ' active')
+												.addClass('btn-default');
+									}
+								}
+
+								// Initialization
+								function init() {
+
+									updateDisplay();
+
+									// Inject the icon if applicable
+									if ($button.find('.state-icon').length == 0) {
+										$button.prepend('<i class="state-icon '
+												+ settings[$button
+														.data('state')].icon
+												+ '"></i>�');
+									}
+								}
+								init();
+							});
+		});
+
+		/* REGISTRATION FUNCTION */
+		$("#registerSubmit")
+				.click(
+						function(e) {
+							$("#resetSubmit").attr("disabled", false);
+							$(".loader-div").show();
+							$("#registerValidationMessage")
+									.css('color', 'blue');
+							$("#registerValidationMessage").html(
+									"Processing request...");
+
+							if ($("#regFirstName").val().length == 0) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter the first name.");
+								$("#regFirstName").focus();
+								e.preventDefault();
+								return;
+							}
+
+							if ($("#regLastName").val().length == 0) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter the last name.");
+								$("#regLastName").focus();
+								e.preventDefault();
+								return;
+							}
+							if ($("#regEmail").val().trim().length == 0) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter an email.");
+								$("#regEmail").focus();
+								e.preventDefault();
+								return;
+							}
+
+							if (!validateEmail($("#regEmail").val())) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter a valid email address.");
+								$("#regEmail").focus();
+								e.preventDefault();
+								return;
+							}
+							//alert("reg regEmail "+$("#regEmail").val());
+
+							/* if($("#confirmEmail").val().trim().length == 0) {
+								$("#registerValidationMessage").html("Please enter email for confirmation.");
+							//	$("#confirmEmail").focus();
+								e.preventDefault();
+								return;
+							} */
+							//alert("reg confirmEmail "+$("#confirmEmail").val());
+							if ($("#regPassword").val() == "") {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter the password.");
+								$("#regPassword").focus();
+								e.preventDefault();
+								return;
+							}
+
+							if ($("#confirmPassword").val() == "") {
+								$(".loader-div").hide();
+								$("#registerValidationMessage")
+										.html(
+												"Please enter password for confirmation.");
+								$("#confirmPassword").focus();
+								e.preventDefault();
+								return;
+							}
+
+							/* 
+							 if($("#regEmail").val() != $("#confirmEmail").val()){
+							 $("#registerValidationMessage").html("Email entries not matching.");
+							 //	$("#confirmEmail").focus();
+							 e.preventDefault();
+							 return;
+							 } */
+
+							if ($("#regPassword").val() != $("#confirmPassword")
+									.val()) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Password entries not matching.");
+								//$("#confirmPassword").focus();
+								e.preventDefault();
+								return;
+							}
+
+							if ($("#contactNumber").val().trim().length == 0) {
+								$(".loader-div").hide();
+								$("#registerValidationMessage").html(
+										"Please enter an contact number.");
+								$("#contactNumber").focus();
+								e.preventDefault();
+								return;
+							}
+							$("#registerSubmit").attr("disabled", true);
+
+							var regUserData = {
+								'regFirstName' : $("#regFirstName").val(),
+								'regLastName' : $("#regLastName").val(),
+								'regEmail' : $("#regEmail").val(),
+								'regPassword' : $("#regPassword").val(),
+								'contactNumber' : $("#contactNumber").val(),
+								'gender' : $('input[name="gender"]:checked')
+										.val()
+
+							}
+							//alert(regUserData);
+
+							$.ajax({
+										url : 'registerUser',
+										type : 'POST',
+										data : buildQuery(regUserData),
+										success : function(result) {
+
+											if (result === "success") {
+												$(".loader-div").hide();
+												onClickAlertBox();
+
+												//document.getElementById("registerFormId").reset();
+												$("#registerValidationMessage").css('color', 'green');
+												$("#registerValidationMessage").html("User registered successfully.");
+												window.setTimeout($("#registerSubmit").attr("disabled",false),5000);
+												$('#login-form-link').click();
+
+											} else {
+												$(".loader-div").hide();
+												$("#registerValidationMessage").css('color', 'red');
+												$("#registerValidationMessage").html("User could not be registered. Please check inputs or contact support.");
+												window.setTimeout($("#registerSubmit").attr("disabled",false),5000);
+											}
+										}
+									});
+							e.preventDefault();
+						});
+
+		function validateEmail(email) {
+			return /^[a-z0-9]+([-._][a-z0-9]+)*@([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,4}$/
+					.test(email)
+					&& /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(email);
+		}
+
+		function buildQuery(obj) {
+			var Result = '';
+			if (typeof (obj) == 'object') {
+				jQuery.each(obj, function(key, value) {
+					Result += (Result) ? '&' : '';
+					if (typeof (value) == 'object' && value.length) {
+						for (var i = 0; i < value.length; i++) {
+							Result += [ key + '[]',
+									encodeURIComponent(value[i]) ].join('=');
+						}
+					} else {
+						Result += [ key, encodeURIComponent(value) ].join('=');
+					}
+				});
+			}
+			return Result;
+		}
+
+		$(document)
+				.ready(
+						function() {
+
+							$(".validate")
+									.blur(
+											function() {
+												var email = document
+														.getElementsByName("regEmail")[0].value;
+												$
+														.ajax({
+															type : 'GET',
+															url : "Registerlogin",
+															data : {
+																'email' : email
+															},
+															success : function(
+																	result) {
+																if (result === "success") {
+																	document
+																			.getElementById("registerSubmit").disabled = true;
+																	document
+																			.getElementById("emailExists").innerHTML = "Email id already exists. Please log in";
+																	$(
+																			"#registerSubmit")
+																			.css(
+																					"background-color",
+																					"#E6102A")
+
+																} else {
+																	document
+																			.getElementById("registerSubmit").disabled = false;
+																	$(
+																			"#registerSubmit")
+																			.css(
+																					"background-color",
+																					"#5cb85c")
+																}
+															}
+														});
+											});
+						});
+	</script>
+
+</body>
+</html>
