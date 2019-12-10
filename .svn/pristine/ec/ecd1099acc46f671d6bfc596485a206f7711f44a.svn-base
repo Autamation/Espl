@@ -1,0 +1,15 @@
+#DATABASE CREDENTIALS
+database.driver=com.mysql.jdbc.Driver
+database.url=jdbc:mysql://localhost:3306/equalityLabs_dev?allowPublicKeyRetrieval=true&useSSL=false
+database.user=root
+database.password=Prakat123
+#HIBERNATE DIALECT DETAILS
+hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+hibernate.show_sql=true
+hibernate.hbm2ddl.auto=update
+
+#EMAIL SERVER CREDENTIALS
+email.host=smtp.prakat.in
+email.port=25
+email.username=rhss@prakat.in
+email.password=Prakat123

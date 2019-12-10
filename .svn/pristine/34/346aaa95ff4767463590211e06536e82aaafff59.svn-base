@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <body>
+<a href="#" class="scrollToTop" alt="Scroll To Top"><span class="sr-only">Scroll To Top</span></a>
+    <!-- begin footer-->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <!--<p><img src="images/logo2.png" alt="company logo" title="company logo" class="bottomLogo"></p>-->
+                        <div class="addressBox">
+                            <!-- <span aria-hidden="true"><i class="fa fa-wheelchair"></i></span><span class="sr-only">Icon of wheelchair</span>
+                            <h2>Accessible Template</h2> -->
+                            <img src="${pageContext.request.contextPath}/static/Images/eQuality_Lab_Logo_OptB_ver2.png" width="100" height="100">
+                            <br>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        <h3 class="center">Links</h3>
+                        <hr/>
+                        <div class="media">
+                           <!--  <a class="pull-left" href="#"><img class="media-object" src="images/person.png" width="75" height="75" alt="image"></a>
+                            <div class="media-body">
+                                <p class="media-heading">Accessible+ is an amazing template that saved my both time and money!</p>
+                                <small>Danny K. (web developer)</small>
+                            </div> -->
+                            <ul>
+                                <li><a href="sitemap.html"></a>Site Map</li>
+                                <!-- <li><a href="eQuality_contact.html"></a>Contact Us</li> -->
+                                <li><a href="${pageContext.request.contextPath}/eQuality_contact.html">Contact Us</a></li>
+                                <li><a href="#"></a>About Us</li>
+                                <li><a href="#"></a>Help</li>
+                                <!-- <li><a href="#"></a>Send Feedback</li>
+                                <li><a href="#"></a>FAQ's</li> -->
+                            </ul>
+                        </div>
+                        <!-- <div class="media">
+                            <a class="pull-left" href="#"><img class="media-object" src="images/person.png" width="75" height="75" alt="image"></a>
+                            <div class="media-body">
+                                <p class="media-heading">Being able to deliver accessible websites really gives me an edge over the competition.</p>
+                                <small>Henry T. (web designer)</small>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        <h3 class="center">Main Office</h3>
+                        <hr/>
+                        <p class="center">Come say hello / write to us to:</p>
+                        <ul class="footerSocial center">
+                            <li class="addressLI">
+                                <span aria-hidden="true"><i class="fa fa-map-marker">&nbsp;&nbsp;</i></span><span class="sr-only">address:</span></a><span class="addressText">184/185 EPIP Zone,</span>
+                            </li>
+                            <li class="addressLI">
+                                <span aria-hidden="true"><i class="fa fa-phone">&nbsp;&nbsp;</i></span><span class="sr-only">phone:</span></a><span class="addressText"> Whitefield</span>
+                            </li>
+                            <li class="addressLI">
+                                <span aria-hidden="true"><i class="fa fa-fax">&nbsp;&nbsp;</i></span><span class="sr-only">fax:</span></a><span class="addressText"> 1-800-000-001</span>
+                            </li>
+                            <li class="addressLI">
+                                <span aria-hidden="true"><i class="fa fa-envelope">&nbsp;&nbsp;</i></span><span class="sr-only">email:</span></a><span class="addressText"> dont@write.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="">
+                        <h3 class="center">Get Social</h3>
+                        <hr/>
+                        <p class="center">Keep in touch and follow us on the leading social media channels:</p>
+                        <ul class="footerSocial center">
+                            <li>
+                                <a href="#" role="button"><span aria-hidden="true"><i class="fa fa-facebook"></i></span><span class="sr-only">follow us on facebook</span></a>
+                            </li>
+                            <!-- <li>
+                                <a href="#" role="button"><span aria-hidden="true"><i class="fa fa-github-square"></i></span><span class="sr-only">follow us on github</span></a>
+                            </li> -->
+                            <li>
+                                <a href="#" role="button"><span aria-hidden="true"><i class="fa fa-linkedin"></i></span><span class="sr-only">follow us on linkedin</span></a>
+                            </li>
+                            <li>
+                                <a href="#" role="button"><span aria-hidden="true"><i class="fa fa-youtube"></i></span><span class="sr-only">follow us on youtube</span></a>
+                            </li>
+                            <li>
+                                <a href="#" role="button"><span aria-hidden="true"><i class="fa fa-twitter"></i></span><span class="sr-only">follow us on twitter</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <div class="footerCopyright">
+        <div class="container">
+            <p><small>Copyright &copy; 2018 Prakat Solutions. WebSite Designed by <a href="#" target="_blank">Raviteja Ganti</a>.</small></p>
+        </div>
+    </div>
+    <!-- end footer -->
+
+    
+    </body>
