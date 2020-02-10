@@ -1,0 +1,4 @@
+#TENON API CREDENTIALS
+tenonApiUrl = https://tenon.io/api/
+tenonApiAuthorizeKey = 518e8bc578b06f741e1297931f45410c
+#tenonApiAuthorizeKey = f772d97aa094223481b9fb12b2ce61ca

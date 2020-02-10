@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+	<html lang="en">
+		<head>
+		  
+			<title>eQuality_home</title>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+			<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+			<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		    <link href="carosel.css" rel="stylesheet">
+			<link href="style.css" rel="stylesheet">
+			<link href="accessibility.css" rel="stylesheet">
+			<script src="js/AChecker.js" type="text/javascript"></script> 
+			<script src="js/checker.js" type="text/javascript"></script>
+			<script src="js/jquery-URLEncode.js" type="text/javascript"></script>
+			<script>
+				$(function(){
+			  
+					$(".dropdown-menu li a").click(function(){
+				
+						$(".btn:first-child").text($(this).text());
+						$(".btn:first-child").val($(this).text());
+					});
+
+				});
+			</script>
+			<!--<link href="bootstrap-accessibility-plugin-tabpanel/css/bootstrap-accessibility.css" rel="stylesheet">-->
+		</head>
+		<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+			<nav class="navbar navbar-default navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+					    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>                        
+					    </button>
+					    <a class="navbar-brand" href="#myPage">Logo</a>
+					</div>
+					<div class="collapse navbar-collapse" id="myNavbar">
+					    <ul class="nav navbar-nav navbar-right">
+							<li><a href="index.html" target="_self"><b>Home</b></a></li>	
+							<li><a href="#" target="_self"> TrustMark</a></li>
+							<li><a href="#" target="_self">Training & Certification</a></li>
+							<li><a href="#" target="_self" >Community</a></li>			
+							<li><a  data-toggle="modal" data-target="#login" data-dismiss="modal">Login</a></li>	
+							<li><a  data-toggle="modal" data-target="#becomeamember" data-dismiss="modal">Register</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<div id="myCarousel" class="carousel " data-ride="carousel" data-pause="hover">
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#myCarousel" data-slide-to="1"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+					<!--<li data-target="#myCarousel" data-slide-to="3"></li>
+					<li data-target="#myCarousel" data-slide-to="4"></li>
+					<li data-target="#myCarousel" data-slide-to="5"></li>-->
+				</ol>
+
+				<div class="carousel-inner">
+					<div class="item active role="tabpanel" id="tabpanel-0-0" aria-labelledby="tab-0-0">
+						<div data-caption="#caption1">
+							<a href="#">
+								<img src="images/accessibility_slider.jpg" alt="Red Light Walking Tour in Amsterdam" />
+							</a>
+						</div>           
+					</div>   <!-- .item -->
+					
+					<div class="item role="tabpanel" id="tabpanel-0-1" aria-labelledby="tab-0-1">
+						<div data-caption="#caption2">
+							<a href="#">
+								<img src="images/government.jpg" alt="Land&#039;s End in Cornwall" />
+							</a>
+						</div>           
+					</div>   <!-- .item -->
+					
+					<div class="item role="tabpanel" id="tabpanel-0-2" aria-labelledby="tab-0-2">
+						<div data-caption="#caption3">
+							<a href="#">
+									<img src="images/legal.jpg" alt="Mom and daughter play Daniel Tiger game on notebook computer." />
+							</a>
+						</div>           
+					</div>   <!-- .item -->
+				</div> <!-- carousel-inner -->
+				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div><!-- /.carousel -->
+			
+			<div class="jumbotron"> 
+				<form action="accesscheck.jsp">
+					<h2 class="text-center">Check Accessibility By</h2>
+					<div class="row">
+						<div class="col-lg-6">
+							<div class="input-group" style="color:black;">
+								<div class="btn-group">
+									<button class="btn dropdown-toggle" data-toggle="dropdown">Enter URL</button>
+									<!--<button class="btn dropdown-toggle" data-toggle="dropdown">
+									<!--<span class="caret">></span>-->
+								 
+									 <ul class="dropdown-menu" name="type" role="menu" aria-labelledby="dropdownMenu">
+										 <li><a tabindex="-1" class="dropdown-item" href="javascript:void(0)" accesskey="a" title="Web Page URL Alt+1" placeholder="Enter your URL" id="AC_menu_by_uri" onclick="return AChecker.input.onClickTab('AC_by_uri');">Enter URL</a></li>
+										 <li><a tabindex="-1" class="dropdown-item" href="javascript:void(0)"  accesskey="b" title="HTML File Upload Alt+2" id="AC_menu_by_upload" onclick="return AChecker.input.onClickTab('AC_by_upload');"  > upload pdf file</a></li>
+										 <li><a tabindex="-1" class="dropdown-item" href="javascript:void(0)"  accesskey="b" title="HTML File Upload Alt+2" id="AC_menu_by_upload" onclick="return AChecker.input.onClickTab('AC_by_upload_doc');"  >upload word document</a></li>
+										 <li><a tabindex="-1" class="dropdown-item" href="javascript:void(0)"  accesskey="b" title="HTML File Upload Alt+2" id="AC_menu_by_upload" onclick="return AChecker.input.onClickTab('AC_by_upload_ppt');"  >upload ppt</a></li>
+									 </ul>
+								</div>
+								
+							</div>
+						</div>
+					</div>
+					<div id="AC_by_uri" class="input_tab" style="display:block">
+						<div style=" margin-left: 26px; color:black;">
+							<label class="col-sm-2 col-form-label" for="checkuri" style="text-align: -webkit-right;">Address:</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" name="url" id="checkuri" title = "please enter https format only"placeholder="Enter your URL" pattern="https?://.+" required />
+								<span id="lblError" style="color: red;"></span>
+							</div>
+						</div>
+						<div class="validation_submit_div">
+							<div class="spinner_div">
+								<img class="spinner_img" id="AC_spinner_by_uri" style="display:none" src="https://achecker.ca/themes/default/images/spinner.gif" alt="Accessibility Validation in Progress" />
+								&nbsp;
+							</div>
+							
+							<input class="validation_button" type="submit" name="validate_uri" id="validate_uri" size="100" value="Check It" onclick="return AChecker.input.onClickTab('AC_by_uri');" />
+						</div>
+						<p style="color:red; font-size:80%" id="url_msg"></p>
+					</div>
+					<div id="AC_by_upload" class="input_tab" style="display:none">
+						<div style="margin-left: 63px;color: black;">
+							<label for="checkfile">File:</label>
+							<input type="hidden" value="52428800" />
+							<input type="file" id="checkfile" name="uploadfile" size="47" />
+						
+							<div class="validation_submit_div">
+								<div class="spinner_div">
+									<img class="spinner_img" id="AC_spinner_by_upload" style="display:none" src="https://achecker.ca/themes/default/images/spinner.gif" alt="Accessibility Validation in Progress" />
+									&nbsp;
+								</div>
+								<input class="validation_button" type="submit" id="validate_file" value="Check It" onclick="return AChecker.input.validateUpload_pdf();"  />
+							</div>
+						</div>
+					</div>
+					
+					<div id="AC_by_upload_doc" class="input_tab" style="display:none">
+						<div style="margin-left: 63px;color: black;">
+							<label for="checkfile">File:</label>
+							<input type="hidden" name="MAX_FILE_SIZE" value="52428800" />
+							<input type="file" id="checkfile1" name="uploadfile" size="47" />
+						
+							<div class="validation_submit_div">
+								<div class="spinner_div">
+									<img class="spinner_img" id="AC_spinner_by_upload" style="display:none" src="https://achecker.ca/themes/default/images/spinner.gif" alt="Accessibility Validation in Progress" />
+									&nbsp;
+								</div>
+								<input class="validation_button" type="submit" name="validate_file" id="validate_file" value="Check It" onclick="return AChecker.input.validateUpload_doc();"  />
+							</div>
+						</div>
+					</div>
+					
+					<div id="AC_by_upload_ppt" class="input_tab" style="display:none">
+						<div style="margin-left: 63px;color: black;">
+							<label for="checkfile">File:</label>
+							<input type="hidden" name="MAX_FILE_SIZE" value="52428800" />
+							<input type="file" id="checkfile2" name="uploadfile" size="47" />
+						
+							<div class="validation_submit_div">
+								<div class="spinner_div">
+									<img class="spinner_img" id="AC_spinner_by_upload" style="display:none" src="https://achecker.ca/themes/default/images/spinner.gif" alt="Accessibility Validation in Progress" />
+									&nbsp;
+								</div>
+								<input class="validation_button" type="submit" name="validate_file" id="validate_file" value="Check It" onclick=""  />
+							</div>
+						</div>
+					</div>
+					
+				</form><br/>
+				<!--<div class="container" style="color: black;">
+					<h3 style="font-family: initial;">Guidelines to Check Against</h3>
+					<form>
+						<label class="checkbox-inline">
+							<input type="checkbox" value="">WCAG 2.0 (Level A)
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" value="">WCAG 2.0 (Level AA)
+						</label>
+						<label class="checkbox-inline">
+							<input type="checkbox" value="">WCAG 2.0 (Level AAA)
+						</label>
+					</form>
+				</div>-->
+			</div>
+
+			<!-- Container (About Section) -->
+			<div id = "about" class="product-block col-md-12 col-sm-12 col-xs-12 no-padding ">
+				<h3 class="under"> HOW IT WORKS ? </h3>
+				<div class="container no-padding">
+					<div class="row no-margin" style = "margin-top: 20px;">
+						<div class="product-content col-md-12 col-sm-12 col-xs-12 no-padding ">
+							<div class="product col-md-6 col-sm-6 col-xs-12 no-padding">
+								<div class="text col-md-12 col-sm-12 col-xs-12 no-padding">
+									<h4><b><i class="fa fa-wheelchair w3-jumb" aria-hidden="true"></i> Why Accessibility ?</b></h4>
+									
+									<p>Its the need of the hour : </p>
+									<p>According to Census of India 2011 out of the total population of 121.08 Cr ,
+									2.68 Cr of population was found out to be suffering with some kind of disability with 
+									a disability rate of 2213 per lakh of population.</p>
+									<p>Certainly they are significant part of the crowd.</p>
+									<a class="Thoughtful" href="#" title="More about Why Accessibility"><b>More <i class="fa fa-arrow-right" aria-hidden="true"></i></b></a></p>
+								</div><!--TEXT-->
+							</div><!--PRODUCT-->
+							
+							<div class="product col-md-6 col-sm-6 col-xs-12 no-padding">
+								<div class="text col-md-12 col-sm-12 col-xs-12 no-padding">
+									<h4><b><i class="fa fa-universal-access w3-jumb" aria-hidden="true"></i> Training & Certification </b></h4>
+									<p>Get yourself trained & certified.</p>
+									<p>Your interest & quest to learn more about accessibility & its various verticals will be provided here.</p>
+									
+									<a class="Thoughtful" href="#" title="More about Training"><b>More <i class="fa fa-arrow-right" aria-hidden="true"></i></b></a></p>
+									
+								</div><!--TEXT-->
+							</div><!--PRODUCT-->
+						</div><!--PRODUCT-CONTENT-->
+						
+					</div><!--ROW-->
+					<div class="row no-margin slideanim" style = "margin-top: 20px;">
+						<div class="product-content col-md-12 col-sm-12 col-xs-12 no-padding">
+							<div class="product col-md-6 col-sm-6 col-xs-12 no-padding">
+								<div class="text col-md-12 col-sm-12 col-xs-12 no-padding">
+									<h4><b> eQuality TrustMark </b></h4>
+									
+									<p>A trademark which can make people trust that :</p>
+									<p>YOU CARE.</p>
+									<a class="Thoughtful" href="#" title="More about Community"><b>More <i class="fa fa-arrow-right" aria-hidden="true"></i></b></a></p>
+								</div><!--TEXT-->
+							</div><!--PRODUCT-->
+							
+							<div class="product col-md-6 col-sm-6 col-xs-12 no-padding">
+								<div class="text col-md-12 col-sm-12 col-xs-12 no-padding">
+									<h4><b>Events & News</b></h4>
+									<p>GAAD INDIA : MAY 18 2017</p>
+									<p> NIMHANS CONVENTION CENTRE, HOSUR ROAD, BENGALURU </p>
+									<a class="Thoughtful" href="http://gaad.in/Agenda.html" title="More about Events & News"><b>More <i class="fa fa-arrow-right" aria-hidden="true"></i></b></a></p>
+								</div><!--TEXT-->
+							</div><!--PRODUCT-->
+						</div><!--PRODUCT-CONTENT-->
+						
+					</div><!--ROW-->
+				</div><!--CONTAINER-->
+			</div><!--PRODUCT-BLOCK-->
+
+
+
+			<!-- Container (Services Section) -->
+			<div id="services" class="container-fluid text-center">
+				<h2>VALUES OF eQuality Labs</h2>
+				<h4>We share a VISION</h4>
+				<br>
+				<div class="row slideanim">
+					<div class="col-sm-3">
+						<i class="fa fa-desktop logo-small"></i>
+						<h4>Equal Access</h4>
+						<p>Services are meant to SERVE PEOPLE irrespective of the abilities or disabilities they possess.</p>
+					</div>
+					<div class="col-sm-3">
+						<span class="glyphicon glyphicon-heart logo-small"></span>
+						<h4>Equal Opportunities</h4>
+						<p>Non-existance of priority list based on abilities or disabilities</p>
+						<p>OPPORTUNITIES ARE A DIRECT COEFFICIENT OF SKILLS.</p>
+					</div>
+					<div class="col-sm-3">
+						<i class="fa fa-diamond logo-small"></i>
+						<h4>Equal Platform</h4>
+						<p>Its a stage where SKILLS stand shoulder to shoulder with without any discrimination of disability.</p>
+					</div>
+					<div class="col-sm-3">
+						<i class="fa fa-cog logo-small"></i>
+						<h4>Equal Infrastucture</h4>
+						<p>An infrastructure which has its doors open to ALL with equal treatment.</p>
+					</div>
+				</div>
+			</div>
+
+
+			<footer>
+				<div class="footer-left col-md-3 col-sm-3 col-xs-12 no-padding">
+					<p>Â©2017 eQuality Labs.</p>
+				</div><!--footer-left-->
+				
+				<div class="footer-menu col-md-6 col-sm-6 col-xs-12 no-padding">
+					<ul class="list-inline" >
+						<li><a class="Thoughtful" href="eQuality_aboutus.html">About</a></li>
+						<li><a class="Thoughtful" href="eQuality_contact.html">Contact Us</a></li>
+						<li><a class="Thoughtful" href="#">Conditions of Use</a></li>
+						<li><a class="Thoughtful" href="#">Site Map</a></li>
+						<li><a class="Thoughtful" href="#">Privacy Policy</a></li>
+					</ul>
+				</div><!--footer-menu-->
+				
+				<div class="footer-right col-md-3 col-sm-3 col-xs-12 no-padding">
+					<div class="social-icons col-md-12 col-sm-12 col-xs-12 no-padding">
+						<ul class="list-inline">
+							<li>Follow us on:</li>
+							<li><a href="#nogo"><img src="http://prakat.com/images/twitter.png" alt="social-img"></a></li>
+							<li><a href="#nogo"><img src="http://prakat.com/images/facebook.png" alt="social-img"></a></li>
+							<li><a href="#nogo"><img src="http://prakat.com/images/linkedin.png" alt="social-img"></a></li>
+						</ul>
+					</div><!--SOCIAL-ICONS-->
+				</div><!--footer-right-->
+			</footer>
+			
+			<div class="container">
+				<div class="row">
+					<!-- Link trigger modal -->
+					<!-- Modal Register -->
+					<form action="registrationProcess.jsp" id="newmember" >
+						<div class="modal fade" id="becomeamember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span class="">X</span></button> 
+										<h4 class="modal-title" id="myModalLabel">Register</h4>
+									</div>
+									<div class="modal-body form-inline">
+										<div class="form-group has-feedback">
+											<label class="control-label" for="firstnamelabel">* First name</label>
+											<input type="text" class="form-control" name="firstName" id="firstnameinput" aria-describedby="firstnameinput" required/>
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label" for="lastnamelabel">* Last name</label>
+											<input type="text" class="form-control" name="lastName" id="lastnameinput" aria-describedby="lastnameinput" required/>
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label" for="postcodelabel">* Mobile Number</label>
+											<input type="text" class="form-control" name="mobile" id="MobileNumberinput" aria-describedby="MobileNumberinput">
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label" for="emaillabel">* Email address</label>
+											<input type="email" class="form-control" name="email" id="emailinput" aria-describedby="emailinput" required/>
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label" for="passwordlabel">* Password</label>
+											<input type="password" class="form-control" name="pass" id="passwordinput" aria-describedby="passwordinput" required=""/>
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label" for="re-enterpasswordlabel">* Re-enter password</label>
+											<input type="password" class="form-control" name="rePass" id="re-enterpasswordinput" aria-describedby="re-enterpasswordinput" required=""/>
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+
+										<div class="form-group">
+											<label class="control-label" for="postcodelabel"> How did you hear about us?</label>
+											<select class="form-control" name="source">
+												<option>- Please select -</option>
+												<option value="Search engine">Search engine</option>
+												<option value="Web Advertisemen">Web Advertisement</option>
+												<option value="Magazine Advertisement">Magazine Advertisement</option>
+												<option value="Friend/Colleague">Friend/Colleague</option>
+												<option value="Email newsletter">Email newsletter</option>
+												<option value="Fax">Fax</option>
+												<option value="Conference/Tradeshow">Conference/Tradeshow</option>
+												<option value="Social Media">Social Media</option>
+												<option vlaue="Other">Other</option>
+											</select>
+										</div><br/>						
+										<div class="form-group">
+											<input type="submit" class="btn btn-primary" value="Register"/>
+										</div>                
+									</div><!-- end modal-Body -->				  
+								</div>
+							</div>
+						</div><!-- end Register modal -->
+					</form> <!-- end Form -->
+					
+					<!-- Modal Login -->
+					<form id="logingform" action="loginProcess.jsp" method="post">
+						<div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">Your name : ${param.name}—</span><span class="sr-only">Close</span></button>
+										<h4 class="modal-title" id="myModalLabel">Login</h4>
+									</div>
+									  
+									<div class="modal-body">
+										<div class="form-group has-feedback">
+											<label class="control-label">Email Address</label>
+											<input type="email" name="userEmail" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Email">
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<div class="form-group has-feedback">
+											<label class="control-label">Password</label>
+											<input type="password" name= "pass" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Password">
+											<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+										</div>
+										
+										<input type="submit" value="Login" class="btn btn-primary"></input>
+										<input type="checkbox" value="rememberme" id="rememberme">Remember me <br/><br/>
+										
+										<a class="Thoughtful" href="#">Forgot your password?</a>							
+									</div>
+									  
+									<div class="modal-footer">
+										<h4 class="modal-title" id="myModalLabel">Register</h4>
+										If you are not an existing member of this site you can <a class="Thoughtful" data-toggle="modal" data-target="#becomeamember" data-dismiss="modal"> register here</a>
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-primary">Save changes</button>
+									</div>					  
+								</div>
+							</div>
+						</div><!-- end Register modal -->
+						
+					</form> <!-- end login form -->
+					
+				</div>
+			</div>
+
+			<script>
+			$(document).ready(function(){
+			  // Add smooth scrolling to all links in navbar + footer link
+			  $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+				// Make sure this.hash has a value before overriding default behavior
+				if (this.hash !== "") {
+				  // Prevent default anchor click behavior
+				  event.preventDefault();
+
+				  // Store hash
+				  var hash = this.hash;
+
+				  // Using jQuery's animate() method to add smooth page scroll
+				  // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+				  $('html, body').animate({
+					scrollTop: $(hash).offset().top
+				  }, 900, function(){
+			   
+					// Add hash (#) to URL when done scrolling (default click behavior)
+					window.location.hash = hash;
+				  });
+				} // End if
+			  });
+			  
+			  $(window).scroll(function() {
+				$(".slideanim").each(function(){
+				  var pos = $(this).offset().top;
+
+				  var winTop = $(window).scrollTop();
+					if (pos < winTop + 600) {
+					  $(this).addClass("slide");
+					}
+				});
+			  });
+			})
+			</script>
+
+			<script language="javascript" type="text/javascript">
+			//<!--
+			var selected;
+			function rowselect(obj) {
+				obj.className = 'selected';
+				if (selected && selected != obj.id)
+					document.getElementById(selected).className = '';
+				selected = obj.id;
+			}
+			function rowselectbox(obj, checked, handler) {
+				var functionDemo = new Function(handler + ";");
+				functionDemo();
+
+				if (checked)
+					obj.className = 'selected';
+				else
+					obj.className = '';
+			}
+			//-->
+			</script>
+
+
+		</body>
+	</html>
