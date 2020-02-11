@@ -1,0 +1,113 @@
+* {box-sizing: border-box}
+
+/* Set height of body and the document to 100% */
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial;
+    background-color: #e9e9e9;
+}
+body{
+
+}
+
+/* Style tab links */
+.tablink {
+    border-radius: 5px;
+    background-color: #005476;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 22.8%;
+    margin-left: 1.7%;
+    border-left: 2px solid white;
+}
+
+.tab-container,.tablink:hover {
+    background-color: #777;
+}
+.tablink:active{
+    border-bottom: 1px solid red;
+    color: black;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+    color: black;
+    display: none;
+    padding: 100px 20px;
+    height: 100%;
+}
+
+#Home {background-color: transparent;}
+#Personaldetails {background-color: transparent;}
+#mplans {background-color: transparent;}
+#settings {background-color: transparent;}
+.tab-container {
+    border: 1px solid #c7ced4;
+    padding: 30px;
+    background: #e9e9e9cc;
+    border-radius: 0 3px 3px 3px;
+    box-shadow: 3px 3px 0 0 rgba(219, 226, 232, 0.4);
+    vertical-align: middle;
+    margin-top: -47px;
+}
+.general-form label{
+      display: inline-block;
+       min-height: 38px;
+    line-height: 38px;
+    width: 180px;
+}
+input[type=text], input[type=email], input[type=number], input[type=password], input[type=url], select, textarea {
+    width: 350px;
+    padding: 6px;
+    border: 1px solid #c7ced4;
+    border-radius: 3px;
+    background: #fff;
+    vertical-align: middle;
+}
+h2{
+  font-weight: 100;
+  margin:0;
+}
+html, body, div, span, applet, object, iframe, h1,  h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td{
+      margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    -webkit-text-size-adjust: none;
+    -ms-text-size-adjust: none;
+    -webkit-font-smoothing: antialiased;
+    font: inherit;
+    -webkit-tap-highlight-color: rgba(255,0,0,0);
+}
+h1, h2, h3, h4, h5, h6, h7, #tabs-nav li a, .tabs-nav li a, .button, .button-small, label.block-upper, .thumbnail-size {
+    font-family: 'raleway', sans-serif;
+}
+.btn-save{
+  margin-left: 28%;
+  background-color: #005476;
+  cursor: pointer;
+  color: white;
+
+}
+
+table, th, td {
+    border: 1px solid #ccb9b9;
+    border-collapse: collapse;
+    padding: 6px 110px 14px 174px;;
+    margin-left: 0;
+    
+    min-height: 30px;
+    vertical-align: middle;
+} 
+#choose-plan{
+  padding-left: 10%;
+}
