@@ -26,7 +26,7 @@
 
         <div class="slickit">
             <div>
-                <image src="${pageContext.request.contextPath}/static/Images/accessibility2.jpg" class="headImage"  id="headImage1" alt="header hands typing on keyboard" />
+                <image src="${pageContext.request.contextPath}/static/Images/web_accessibility.png" class="headImage"  id="headImage1" alt="header hands typing on keyboard" />
             </div>
                       
         </div>

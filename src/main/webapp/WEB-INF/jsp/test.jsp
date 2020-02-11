@@ -15,9 +15,13 @@
 	function validateUrl(url) {
 
 		var request = new XMLHttpRequest();
-		request.open('GET', url, true);
+
 		request.onreadystatechange = function() {
-			if ((request.readyState === 4) && request.status === 404) {
+
+			if ((request.readyState === 4)
+					&& (request.status === 404 || request.status === 402
+							|| request.status === 500 || request.status === 506 || request.status === 400)) {
+
 				alert("Oh no, URL does not exist!");
 				return true;
 			}
@@ -27,18 +31,15 @@
 			  return false; */
 
 		};
+		request.open('GET', url, true);
 		request.send();
 
 	}
 
 	$(document).ready(function(e) {
-
-		$("#validate_uri").click(function(e) {
-
+		$("#runUrl").click(function(e) {
 			var url = document.getElementById('checkuri').value;
-			alert("insite naven");
 			if (validateUrl(url)) {
-				alert("url not valid");
 				$("#url_msg").html("Please enter a valid website URL.");
 				$("#checkuri").focus();
 				e.preventDefault();
@@ -112,7 +113,7 @@ label {
 
 <body>
 	<div class="loader-div">
-		<img src="/EQualityLabs/static/Images/35.gif" width="75" height="75"
+		<img src="/EQualityLabs/static/Images/loading_gif.gif" width="150" height="100"
 			style="position: absolute; display: block; top: 50%; left: 50%;">
 	</div>
 
@@ -122,7 +123,7 @@ label {
 
 		<div>
 			<image
-				src="${pageContext.request.contextPath}/static/Images/web-accessibility.png"
+				src="${pageContext.request.contextPath}/static/Images/Website_AccessibilityUrl.png"
 				class="headImage" alt="header hands typing on keyboard" />
 		</div>
 
@@ -156,11 +157,15 @@ label {
 							<input type="text" class="form-control" name="domainUrl" style=""
 								id="checkuri" title="please enter https format only"
 								placeholder="Please Enter the URL" pattern="https?://.+"
-								required /><br> <input type="submit"
+								required /><br>
+							<div class="form-group">
+								<label id="url_msg" style="color: red;" />
+							</div>
+							<input type="submit"
 								class="btn btn-primary btn-lg btn-margin-top"
-								style="width: 10%; margin-left: 10%;" name="domainUrl"
-								value="Run" id="checkuri" style="width: 10%;"> <span
-								id="lblError" style="color: red;"></span>
+								style="width: 10%; margin-left: 10%;" name="runUrl" value="Run"
+								id="runUrl" style="width: 10%;"> <span id="lblError"
+								style="color: red;"></span>
 						</div>
 					</div>
 				</div>

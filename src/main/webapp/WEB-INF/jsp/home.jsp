@@ -56,7 +56,7 @@
 					  </ul>
 					  <div class="carousel-inner">
 					    <div class="carousel-item active">
-					      <img src="${pageContext.request.contextPath}/static/Images/accessibility2.jpg" alt="Los Angeles" width="1300" height="500">
+					      <img src="${pageContext.request.contextPath}/static/Images/web_accessibility.png" alt="Los Angeles" width="1300" height="500">
 					      <div class="carousel-caption">
 					        <h3>We make IT accessible</h3>
 					       <ul>

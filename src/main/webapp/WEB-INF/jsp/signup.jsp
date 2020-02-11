@@ -26,7 +26,10 @@
 
 <style type="text/css">
 /*custom css stylesheet*/
-.agree{color:black;}
+.agree {
+	color: black;
+}
+
 .colorgraph {
 	height: 5px;
 	border-top: 0;
@@ -165,7 +168,6 @@ p.copyright {
 .log-wrapper .log-holder {
 	position: relative;
 	clear: both;
-	
 }
 
 .log-wrapper .log-gray {
@@ -174,7 +176,6 @@ p.copyright {
 	height: 100%;
 	left: 0;
 	top: 0;
-	
 }
 
 .log-wrapper .navbar-default .navbar-nav>li>a {
@@ -216,27 +217,39 @@ p.copyright {
 
 .log-wrapper .form-group.gender input[type="radio"] {
 	margin-left: 30px;
-	color:black;
+	color: black;
 }
 
 .log-wrapper .form-control {
 	/*border-color: #333;*/
+	
 }
 
 .loader-div {
-	margin: -130px 0 0 38%;
-	border-radius: 4px; /* margin: 290px 0 0 50%; */
-	display: none;
+	/* margin: -50px 0 0 38%;
+	border-radius: 2px;  */
+	/* margin: 290px 0 0 50%; */
+	/* display: none;
 	opacity: 1.0;
-	position: relative;
+	position: absolute;  */
+	display: none;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	opacity: 25%;
+	z-index: 9999;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
-.sign-in-box{
+
+.sign-in-box {
 	/*border:1px solid black;
 	border-radius: 3px; 
 	box-shadow: 6px 4px #grey;*/
-	-webkit-box-shadow: 0px 0px 9px 2px rgba(176,176,176,1);
-	-moz-box-shadow: 0px 0px 9px 2px rgba(176,176,176,1);
-	box-shadow: 0px 0px 9px 2px rgba(176,176,176,1);
+	-webkit-box-shadow: 0px 0px 9px 2px rgba(176, 176, 176, 1);
+	-moz-box-shadow: 0px 0px 9px 2px rgba(176, 176, 176, 1);
+	box-shadow: 0px 0px 9px 2px rgba(176, 176, 176, 1);
 	margin-bottom: 40px;
 }
 </style>
@@ -248,7 +261,10 @@ p.copyright {
 
 </head>
 <body>
-
+	<div class="loader-div">
+		<img src="${pageContext.request.contextPath}/static/Images/35.gif"
+			width="45" height="45">
+	</div>
 	<div class="log-wrapper">
 		<%-- <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<hr class="colorgraph colorgraph-header">
@@ -287,7 +303,8 @@ p.copyright {
 					<div
 						class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3 sign-in-box">
 						<form role="form" action="#" method="post">
-							<div class="text-center"> <!-- style="color: #3366FF;" -->
+							<div class="text-center">
+								<!-- style="color: #3366FF;" -->
 								<h2 style="font-weight: bold;">eQuality account sign up</h2>
 							</div>
 							<div class="row">
@@ -306,7 +323,7 @@ p.copyright {
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="row">
 								<div class="col-xs-12 col-sm-6 col-md-6">
 									<div class="form-group">
@@ -322,11 +339,11 @@ p.copyright {
 											class="form-control input-lg" placeholder="Mobile No"
 											tabindex="5">
 									</div>
-									
+
 								</div>
 							</div>
 
-							
+
 							<div class="row">
 								<div class="col-xs-12 col-sm-6 col-md-6">
 									<div class="form-group">
@@ -347,9 +364,11 @@ p.copyright {
 							<div class="row">
 								<div class="col-xs-12 col-sm-6 col-md-6">
 									<div class="form-group gender">
-										<label style="color:black;">Gender</label> 
-										<input type="radio" name="gender" class="input"  value="1" checked="checked"/><label style="color:black;">Male</label> 
-										<input type="radio" name="gender" class="input"	 value="0"><label style="color:black;">Female</label> 
+										<label style="color: black;">Gender</label> <input
+											type="radio" name="gender" class="input" value="1"
+											checked="checked" /><label style="color: black;">Male</label>
+										<input type="radio" name="gender" class="input" value="0"><label
+											style="color: black;">Female</label>
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-6 col-md-6">
@@ -358,25 +377,34 @@ p.copyright {
 										<input type="checkbox" name="t_and_c" id="t_and_c" class="hidden" value="1">
 									</span> -->
 									<div class="form-group gender">
-										<input type="checkbox" name="t_and_c" id="t_and_c"/>
-										<label for="t_and_c" style="color:black;">I Agree</label>
+										<input type="checkbox"  required name="t_and_c" id="t_and_c" /> <label
+											for="t_and_c" style="color: black;">I Agree</label>
 									</div>
 								</div>
 							</div>
 
 
 							<div class="row">
-								<div class="col-md-12 agree" style="color:black">
-									By clicking <strong>Register</strong>, you agree to the 
-									<a href="javascript:void(0);" data-toggle="modal" data-target="#t_and_c_m" style="color:black">Terms and Conditions</a> 
-									set out by this site, including our Cookie Use.
+								<div class="col-md-12 agree" style="color: black">
+									By clicking <strong>Register</strong>, you agree to the<strong> Terms and
+										Conditions</strong>  set out by this site, including our Cookie Use.
 								</div>
+								
+								<!--  terms and condition hide the link 
+									<div class="col-md-12 agree" style="color: black">
+									By clicking <strong>Register</strong>, you agree to the <a
+										href="javascript:void(0);" data-toggle="modal"
+										data-target="#t_and_c_m" style="color: black">Terms and
+										Conditions</a> set out by this site, including our Cookie Use.
+								</div>
+								
+								 terms and condition by naveen -->
 							</div>
 
 							<div class="form-group">
 								<label id="registerValidationMessage" style="color: red;" />
 							</div>
-							
+
 							<div class="row">
 								<div class="col-xs-12 col-md-6">
 									<input type="submit" value="Register" id="registerSubmit"
@@ -384,12 +412,15 @@ p.copyright {
 										tabindex="7">
 								</div>
 								<div class="col-xs-12 col-md-6">
-									<a href="login.html" class="btn btn-default btn-block btn-lg" style="background-color: #444;color:white">Sign
-										In</a>
+									<a href="login.html" class="btn btn-default btn-block btn-lg"
+										style="background-color: #444; color: white">Sign In</a>
 								</div>
-							</div><br>
+							</div>
+							<br>
 						</form>
-					</div><br><br>
+					</div>
+					<br>
+					<br>
 				</div>
 				<div style="text-align: center; color: red">
 					<br /> <b>
@@ -445,11 +476,8 @@ p.copyright {
 		</div>
 	</div>
 
-	<div class="loader-div">
-		<img src="${pageContext.request.contextPath}/static/Images/35.gif"
-			width="45" height="45">
-	</div>
-	
+
+
 	<script type="text/javascript">
 		$(function() {
 			$('.button-checkbox')
@@ -626,6 +654,8 @@ p.copyright {
 								e.preventDefault();
 								return;
 							}
+						
+							
 							$("#registerSubmit").attr("disabled", true);
 
 							var regUserData = {
