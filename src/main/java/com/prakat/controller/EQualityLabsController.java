@@ -87,7 +87,8 @@ public class EQualityLabsController {
 			int userId = userDetails.getUserId();
 			List<TenonByWCAG> tenonApiVos = tenonService.getTenonReportServiceByWCAGForFreeUser(tenonApiURL, domainUrl,
 					apiKey, emailId, userId);
-			//List<WaveApiByWCAG> waveApi=waveApiService.waveApiMethod(waveApiKey, waveApiUrl,domainUrl,userId);
+			// List<WaveApiByWCAG> waveApi=waveApiService.waveApiMethod(waveApiKey,
+			// waveApiUrl,domainUrl,userId);
 
 			for (int i = 0; i <= tenonApiVos.size() - 1; i++) {
 				System.out.println("tenoon api vos isss...!!!" + tenonApiVos.get(i));
@@ -387,11 +388,10 @@ public class EQualityLabsController {
 		userDetailsVO.setPassword(request.getParameter("password"));
 
 		userDetailsVO = equalityLabsServiceImpl.checkLoggedInUserId(userDetailsVO);
-		session.setAttribute("username", userDetailsVO.getFirstName() + " " + userDetailsVO.getLastName());
-		session.setAttribute("emailId", userDetailsVO.getEmail());
-		session.setAttribute("userId", userDetailsVO.getUserId());
 
 		if (userDetailsVO.getUserId() != null) {
+			session.setAttribute("username", userDetailsVO.getFirstName() + " " + userDetailsVO.getLastName());
+			session.setAttribute("emailId", userDetailsVO.getEmail());
 			session.setAttribute("userId", userDetailsVO.getUserId());
 			flag = true;
 		}

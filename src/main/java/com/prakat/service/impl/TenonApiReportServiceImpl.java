@@ -146,8 +146,11 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 			rd.close();
 
 			JSONObject json = new JSONObject(response.toString());
-			PrintStream fileOut = new PrintStream(new File("C:\\Users\\Prakat-D-007\\Desktop\\Tenon_api_format.txt"));
-			fileOut.println(json);
+			/*
+			 * PrintStream fileOut = new PrintStream(new
+			 * File("C:\\Users\\Prakat-D-007\\Desktop\\Tenon_api_format.txt"));
+			 * fileOut.println(json);
+			 */
 			JSONObject json1 = (json.getJSONObject("request"));
 			logger.debug(json1.getString("url"));
 			tenonByWCAG.setUrl(url);
@@ -847,7 +850,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		Date exclDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh_mm_ss");
 		SimpleDateFormat simeDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String dir_path = "C:\\Users\\Prakat-D-007\\Documents\\";
+		String dir_path = "C:\\Users\\Prakat-L-055\\Documents";
 		String filename = dir_path + "tenon_api_" + dateFormat.format(exclDate) + ".xlsx";
 
 		// create a new Excel sheet
@@ -1174,8 +1177,8 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		 * if (xls.createNewFile()) { logger.debug("File is created!"); } else {
 		 * logger.debug("File already exists."); }
 		 */
-		boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
-		// boolean isMailSent = true;
+		//boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
+		 boolean isMailSent = true;
 		return isMailSent;
 
 	}
