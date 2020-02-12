@@ -22,6 +22,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.prakat.service.impl.ACheckerReportServiceImpl;
@@ -33,7 +34,7 @@ public class EmailSender {
 
 	}
 
-	public boolean sendMail(String filename, XSSFWorkbook workbook, String emailId) {
+	public boolean sendMail(String filename, Workbook workbook, String emailId) {
 		final String username = "rhss@prakat.in";
 		final String password = "Prakat123";
 		boolean isMailSend = false;
@@ -66,6 +67,7 @@ public class EmailSender {
 			// create the second message part
 
 			MimeBodyPart mimeBodyPart2 = new MimeBodyPart();
+			MimeBodyPart mimeBodyPart3 = new MimeBodyPart();
 
 //			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 //			try {
@@ -79,19 +81,23 @@ public class EmailSender {
 //			mimeBodyPart2.setHeader("Content-Disposition", "attachment;filename=" + filename);
 //			mimeBodyPart2.setDataHandler(dh);
 //			mimeBodyPart2.setFileName(filename);
+			String pdfFileName = filename.replace("xlsx", "pdf");
 			
 			DataSource source = new FileDataSource(filename); 
 			mimeBodyPart2.setDataHandler(new DataHandler(source));  
 			mimeBodyPart2.setFileName(filename);  
 			
 			
-			
+			DataSource pdfsource = new FileDataSource(pdfFileName); 
+			mimeBodyPart3.setDataHandler(new DataHandler(pdfsource));  
+			mimeBodyPart3.setFileName(pdfFileName);  
 			
 
 			// create the Multipart and add its parts to it
 			Multipart multiPart = new MimeMultipart();
 			multiPart.addBodyPart(mimeBodyPart1);
 			multiPart.addBodyPart(mimeBodyPart2);
+			multiPart.addBodyPart(mimeBodyPart3);
 			mimeMessage.setContent(multiPart);
 
 			Transport.send(mimeMessage);

@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -74,7 +75,6 @@ public class EQualityLabsController {
 		/*
 		 * if (emailId==null) { return "login"; }
 		 */
-
 		String domainUrl = request.getParameter("domainUrl");
 
 		if (util.isValidUrl(domainUrl)) {
@@ -159,7 +159,7 @@ public class EQualityLabsController {
 	}
 
 	public void getTenonreportForFreeUser(ModelMap modelMap, HttpServletResponse response, HttpServletRequest request,
-			String emailId) throws IOException {
+			String emailId) throws IOException, InvalidFormatException {
 		boolean isMailSent = false;
 		List<TenonByWCAG> tenonApisList = (List<TenonByWCAG>) modelMap.get("weburls");
 		isMailSent = tenonService.CreateWorkBookByWCAGForFreeUser(tenonApisList, request, response, emailId);
