@@ -3,6 +3,7 @@ package com.prakat.service.impl;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -44,6 +45,10 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.hwpf.usermodel.Range;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Font;
@@ -78,6 +83,12 @@ import org.springframework.core.io.FileSystemResource;
 
 import com.java.exception.EQualityLabsException;
 import com.lowagie.text.Cell;
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import com.prakat.dao.impl.TenonApiDaoImpl;
 import com.prakat.model.EQualityLabsVo;
 import com.prakat.model.ResultsetVo;
@@ -849,9 +860,9 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 
 		Date exclDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh_mm_ss");
-		SimpleDateFormat simeDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String dir_path = "C:\\Users\\Prakat-L-055\\Documents";
-		String filename = dir_path + "tenon_api_" + dateFormat.format(exclDate) + ".xlsx";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dir_path = System.getProperty("user.home") + "\\Documents\\";
+		String filename = dir_path + "report_" + dateFormat.format(exclDate) + ".xlsx";
 
 		// create a new Excel sheet
 		// FileInputStream fis = new FileInputStream(new File(filename));
@@ -935,7 +946,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 				date.getCell(2).setCellStyle(pstyle);
 				date.getCell(4).setCellStyle(pstyle);
 				// date.createCell(3).setCellValue(vo.getCreateDate());
-				date.createCell(3).setCellValue(simeDateFormat.format(exclDate));
+				date.createCell(3).setCellValue(simpleDateFormat.format(exclDate));
 				date.getCell(3).setCellStyle(ustyle);
 
 				XSSFRow totaltest = sheet.createRow(4);
@@ -1172,13 +1183,19 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		workbook.write(fos);
 		fos.close();
 
-		// File xls = new File(filename);
-		/*
-		 * if (xls.createNewFile()) { logger.debug("File is created!"); } else {
-		 * logger.debug("File already exists."); }
-		 */
-		//boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
-		 boolean isMailSent = true;
+		File xls = new File(filename);
+
+		if (xls.createNewFile()) { logger.debug("File is created!"); } else {
+		logger.debug("File already exists."); }
+		try {
+			createPdfFromWorkbook(filename);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
+		isMailSent = true;
 		return isMailSent;
 
 	}
@@ -1431,6 +1448,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		} else {
 			logger.debug("File already exists.");
 		}
+		
 		boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
 		return isMailSent;
 
@@ -1672,5 +1690,54 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 			e.printStackTrace();
 		}
 		return dataset;
+	}
+	
+	public void createPdfFromWorkbook(String filename) throws IOException, DocumentException {
+	        
+        FileInputStream input_document = new FileInputStream(new File(filename));
+        // Read workbook into XSSFWorkbook
+        XSSFWorkbook my_xls_workbook = new XSSFWorkbook(input_document); 
+        // Read worksheet into XSSFSheet
+        XSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0); 
+        // To iterate over the rows
+        Iterator<Row> rowIterator = my_worksheet.iterator();
+        //We will create output PDF document objects at this point
+        com.lowagie.text.Document iText_xlsx_pdf = new com.lowagie.text.Document();
+        PdfWriter.getInstance(iText_xlsx_pdf, new FileOutputStream(filename.replace("xlsx", "pdf")));
+        iText_xlsx_pdf.open();
+        //we have 10 columns in the Excel sheet, so we create a PDF table with 10 columns
+        //Note: There are ways to make this dynamic in nature, if you want to.
+        PdfPTable my_table = new PdfPTable(10);
+   	 	my_table.setWidthPercentage(100);
+        //We will use the object below to dynamically add new data to the table
+        PdfPCell table_cell;
+        //Loop through rows.
+        while(rowIterator.hasNext()) {
+                Row row = rowIterator.next(); 
+                Iterator<org.apache.poi.ss.usermodel.Cell> cellIterator = row.cellIterator();
+                        while(cellIterator.hasNext()) {
+                                org.apache.poi.ss.usermodel.Cell cell = cellIterator.next(); //Fetch CELL
+                                switch(cell.getCellType()) {
+                                case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING:
+                                     table_cell=new PdfPCell(new Phrase(cell.getStringCellValue()));
+                                     table_cell.setColspan(5);
+                                     my_table.addCell(table_cell);
+                                     break;
+                                case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK:
+                                	 table_cell=new PdfPCell(new Phrase(""));
+                                	 table_cell.setColspan(1);
+                                	 my_table.addCell(table_cell);
+                                	 break;
+                                }
+                                //next line
+                        }
+
+        }
+        //Finally add the table to PDF document
+        iText_xlsx_pdf.add(my_table);                       
+        iText_xlsx_pdf.close();                
+        //we created our pdf file..
+        input_document.close(); //close xls
+        
 	}
 }
