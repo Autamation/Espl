@@ -21,7 +21,6 @@
 			if ((request.readyState === 4)
 					&& (request.status === 404 || request.status === 402
 							|| request.status === 500 || request.status === 506 || request.status === 400)) {
-
 				alert("Oh no, URL does not exist!");
 				return true;
 			}
@@ -113,8 +112,9 @@ label {
 
 <body>
 	<div class="loader-div">
-		<img src="/EQualityLabs/static/Images/loading_gif.gif" width="150" height="100"
-			style="position: absolute; display: block; top: 50%; left: 50%;">
+		<img src="/EQualityLabs/static/Images/loading_gif.gif" width="150"
+			height="100"
+			style="position: absolute; display: block; top: 45%; left: 45%;">
 	</div>
 
 	<!-- begin Main -->
@@ -139,36 +139,47 @@ label {
 							<li class="active">Testing URL</li>
 						</ol>
 
-						<h1 class="">Test your Website</h1>
+						<h1 class="">Test a Page</h1>
 					</div>
 				</div>
 			</div>
 		</section>
 
 		<form onsubmit="submitLoading()" action="processReqestForFreeuser"
-			method="post">
+			method="post" enctype="multipart/form-data">
 			<section id="boxes" role="features" class="">
 				<div id="" class="" style="display: block">
 					<div class="row">
-						<label class="col-sm-2 col-form-label" for="checkuri"
-							style="text-align: -webkit-right;">URL:</label>
+						<!--  <label class="col-sm-2 col-form-label text-center" for="checkuri"
+							style="text-align: -webkit-right;">URL:</label>-->
 						<div class="col-sm-10"
-							style="width: 100%; border-radius: 3px; height: 40px;">
+							style="width: 50%; border-radius: 3px; height: 40px;">
 							<input type="text" class="form-control" name="domainUrl" style=""
 								id="checkuri" title="please enter https format only"
-								placeholder="Please Enter the URL" pattern="https?://.+"
-								required /><br>
-							<div class="form-group">
-								<label id="url_msg" style="color: red;" />
-							</div>
-							<input type="submit"
-								class="btn btn-primary btn-lg btn-margin-top"
-								style="width: 10%; margin-left: 10%;" name="runUrl" value="Run"
-								id="runUrl" style="width: 10%;"> <span id="lblError"
-								style="color: red;"></span>
+								placeholder="Enter the URL and click on Run"/><br>
+							<!-- 		<div class="form-group">
+								<label id="url_msg" style="color: red;" /> -->
 						</div>
 					</div>
+					<div class="container">
+					<h1 class="">Want to test multiple pages in a go?</h1>
+						<p>
+							Please download the <a href="download" style="text-decoration: underline;">URL Template</a> , add all the url's, upload the file and run it.
+						</p>
+					</div>
+					<div class='container'>
+						<input type="file" name="file"  value="Upload File"accept=".xlsx" /> 
+					
+					<input type="submit" class="btn btn-primary btn-lg btn-margin-top" name="runUrl" value="Run"
+				id="runUrl" style="margin-top: 20px;width: 10%;"/> <span id="lblError"
+				style="color: red;"></span>
+					</div>
+
 				</div>
+
+
+
+
 
 			</section>
 
