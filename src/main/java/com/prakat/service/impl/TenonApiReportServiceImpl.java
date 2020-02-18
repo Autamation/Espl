@@ -112,22 +112,18 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 
 	static Logger logger = Logger.getLogger(TenonApiReportServiceImpl.class.getName());
 
-	public List<TenonByWCAG> getTenonReportServiceByWCAGForFreeUser(String tenonApiURL, String url, String key,
+	public List<TenonByWCAG> getTenonReportServiceByWCAGForFreeUser(String tenonApiURL, String urls, String key,
 			String emailId, int userId) throws MalformedURLException, URISyntaxException, EQualityLabsException {
 
 		// ResponseURL rs = getLinksFromWeb(url);
+		String urlParameters = null;
 		List<TenonByWCAG> tenonByWCAGs = new ArrayList<TenonByWCAG>();
 		TenonByWCAG tenonByWCAG = null;
 		List<TenonApiVo> tenonApiVos = new ArrayList<TenonApiVo>();
 		TenonApiVo tenonApiVo = null;
-		List<String> urls = new ArrayList<String>();
-		urls.add(url);
-		// for (String urlName : rs.getSetOfURL()) {
-		// for (String urlName : url) {
-
 		tenonByWCAG = new TenonByWCAG();
 
-		String urlParameters = "key=" + key + "&url=" + url;
+		urlParameters = "key=" + key + "&url=" + urls;
 		System.out.println("url parameter......!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + urlParameters);
 
 		byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
@@ -155,8 +151,14 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 				response.append('\r');
 			}
 			rd.close();
-
 			JSONObject json = new JSONObject(response.toString());
+			
+			if (json.has("status")){
+				String statusCode = json.getString("status");
+				if(Integer.parseInt(statusCode) == 200) {
+					System.out.println("API status : success");
+				}
+			}
 			/*
 			 * PrintStream fileOut = new PrintStream(new
 			 * File("C:\\Users\\Prakat-D-007\\Desktop\\Tenon_api_format.txt"));
@@ -164,7 +166,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 			 */
 			JSONObject json1 = (json.getJSONObject("request"));
 			logger.debug(json1.getString("url"));
-			tenonByWCAG.setUrl(url);
+			tenonByWCAG.setUrl(urls);
 			JSONArray array = json.getJSONArray("resultSet");
 
 			if (array.length() == 0) {
@@ -232,6 +234,8 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		} catch (Exception e) {
 			logger.debug(e.getMessage());
 			if (e.getMessage().equals("Server returned HTTP response code: 400 for URL: https://tenon.io/api/")) {
+				
+				
 				throw new EQualityLabsException(
 						"Server returned HTTP response code: 400 for URL: https://tenon.io/api/");
 
@@ -254,7 +258,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 			}
 			if (e.getMessage().equals("Server returned HTTP response code: 401 for URL: https://tenon.io/api/")) {
 				throw new EQualityLabsException(
-						"Server returned HTTP response code: 402 for URL: https://tenon.io/api/");
+						"Server returned HTTP response code: 401 for URL: https://tenon.io/api/");
 
 				/*
 				 * tenonApiVo = new TenonApiVo(); tenonApiVos.add(tenonApiVo); tenonByWCAG.
@@ -856,18 +860,34 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 	}
 
 	public boolean CreateWorkBookByWCAGForFreeUser(List<TenonByWCAG> tenonApisList, HttpServletRequest request,
-			HttpServletResponse response, String emailId) throws IOException {
+			HttpServletResponse response, String emailId,String filename,String pageName) throws IOException {
 
 		Date exclDate = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh_mm_ss");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String dir_path = System.getProperty("user.home") + "\\Documents\\";
-		String filename = dir_path + "report_" + dateFormat.format(exclDate) + ".xlsx";
+		//String dir_path = System.getProperty("user.home") + "\\Documents\\";
+		//String filename = dir_path + "report_" + dateFormat.format(exclDate) + ".xlsx";
 
+		
+		File file = new File(filename);
+		XSSFWorkbook workbook;
+		
+		if(file.exists()) {
+			FileInputStream fis = new FileInputStream(file);
+			workbook = 	new XSSFWorkbook(fis);
+		}else {
+			workbook = new XSSFWorkbook();
+		}
 		// create a new Excel sheet
 		// FileInputStream fis = new FileInputStream(new File(filename));
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet sheet = workbook.createSheet("Accesbility Report summary");
+		String sheetName = "";
+		if(pageName!=null && pageName.trim().length()>0) {
+			sheetName = "Report_" + pageName;
+		}else {
+			sheetName = "Report_" + (workbook.getNumberOfSheets()+1);
+		}
+		XSSFSheet sheet = workbook.createSheet(sheetName);
+
 		sheet.setDefaultColumnWidth(30);
 
 		// create style for header cells
@@ -976,132 +996,116 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 				passedTest.createCell(3).setCellValue(vo.getPassedTests());// vo.getPassedTests()
 				passedTest.getCell(3).setCellStyle(ustyle);
 
-				// workbook = new XSSFWorkbook();
-				XSSFSheet pieSheet = workbook.createSheet("Pie Chart");
-				sheet.setColumnWidth(0, 10000);
-
-				CellStyle estyle = workbook.createCellStyle();
-				estyle.setFillForegroundColor(HSSFColor.LAVENDER.index);
-				estyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-				estyle.setFont(font);
-
-				CellStyle istyle = workbook.createCellStyle();
-				istyle.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
-				istyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-				istyle.setFont(font);
-
-//				CellStyle wstyle = workbook.createCellStyle();
-//				wstyle.setFillForegroundColor(HSSFColor.BROWN.index);
-//				wstyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
-//				wstyle.setFont(font);
-
-				int rowCount = 28;
-				XSSFRow aRow = pieSheet.createRow(rowCount++);
-				aRow.createCell(4).setCellValue("passed Test");
-				aRow.getCell(4).setCellStyle(estyle);
-				aRow.createCell(5).setCellValue(vo.getPassedTests()); // vo.getTotalErrors()
-
-				aRow = pieSheet.createRow(rowCount++);
-				aRow.createCell(4).setCellValue("Failed Test");
-				aRow.getCell(4).setCellStyle(istyle);
-				aRow.createCell(5).setCellValue(vo.getFailedTests()); // vo.getTotalIssues()
-
-//				aRow = pieSheet.createRow(rowCount++);
-//				aRow.createCell(4).setCellValue("totalWarning");
-//				aRow.getCell(4).setCellStyle(wstyle);
-//				aRow.createCell(5).setCellValue(vo.getTotalWarnings());// vo.getTotalWarnings()
-
-				DefaultPieDataset dataset = new DefaultPieDataset();
-				dataset.setValue("Passed Test",
-						((vo.getTotalNoOfTests()) != null ? Integer.parseInt(vo.getTotalNoOfTests()) : 0));
-				dataset.setValue("Failed test",
-						((vo.getFailedTests()) != null ? Integer.parseInt(vo.getFailedTests()) : 0));
-//				dataset.setValue("No of passed test",
-//						((vo.getPassedTests()) != null ? Integer.parseInt(vo.getPassedTests()) : 0));
-
-				pieSheet.autoSizeColumn(50);
-				JFreeChart myPieChart = ChartFactory.createPieChart3D("Report details", dataset, true, true, true);
-
-				int width = 640;
-				int height = 480;
-				float quality = 1;
-				final PiePlot plot = (PiePlot) myPieChart.getPlot();
-				plot.setStartAngle(270);
-				plot.setForegroundAlpha(0.60f);
-				plot.setInteriorGap(0.02);
-				plot.setLabelGenerator(new StandardPieSectionLabelGenerator(" {2}", NumberFormat.getNumberInstance(),
-						NumberFormat.getPercentInstance()));
-
-				ByteArrayOutputStream chart_out = new ByteArrayOutputStream();
-				ChartUtilities.writeChartAsJPEG(chart_out, quality, myPieChart, width, height);
+				/// -------pie chart and bar chart-----start-----//
 
 				/*
+				 * ///// -----pie chart -----start-----/////// // workbook = new XSSFWorkbook();
+				 * XSSFSheet pieSheet = workbook.createSheet("Pie Chart");
+				 * sheet.setColumnWidth(0, 10000);
+				 * 
+				 * CellStyle estyle = workbook.createCellStyle();
+				 * estyle.setFillForegroundColor(HSSFColor.LAVENDER.index);
+				 * estyle.setFillPattern(CellStyle.SOLID_FOREGROUND); estyle.setFont(font);
+				 * 
+				 * CellStyle istyle = workbook.createCellStyle();
+				 * istyle.setFillForegroundColor(HSSFColor.LIGHT_BLUE.index);
+				 * istyle.setFillPattern(CellStyle.SOLID_FOREGROUND); istyle.setFont(font);
+				 * 
+				 * // CellStyle wstyle = workbook.createCellStyle(); //
+				 * wstyle.setFillForegroundColor(HSSFColor.BROWN.index); //
+				 * wstyle.setFillPattern(CellStyle.SOLID_FOREGROUND); // wstyle.setFont(font);
+				 * 
+				 * int rowCount = 28; XSSFRow aRow = pieSheet.createRow(rowCount++);
+				 * aRow.createCell(4).setCellValue("passed Test");
+				 * aRow.getCell(4).setCellStyle(estyle);
+				 * aRow.createCell(5).setCellValue(vo.getPassedTests()); // vo.getTotalErrors()
+				 * 
+				 * aRow = pieSheet.createRow(rowCount++);
+				 * aRow.createCell(4).setCellValue("Failed Test");
+				 * aRow.getCell(4).setCellStyle(istyle);
+				 * aRow.createCell(5).setCellValue(vo.getFailedTests()); // vo.getTotalIssues()
+				 * 
+				 * // aRow = pieSheet.createRow(rowCount++); //
+				 * aRow.createCell(4).setCellValue("totalWarning"); //
+				 * aRow.getCell(4).setCellStyle(wstyle); //
+				 * aRow.createCell(5).setCellValue(vo.getTotalWarnings());//
+				 * vo.getTotalWarnings()
+				 * 
+				 * DefaultPieDataset dataset = new DefaultPieDataset();
+				 * dataset.setValue("Passed Test", ((vo.getTotalNoOfTests()) != null ?
+				 * Integer.parseInt(vo.getTotalNoOfTests()) : 0));
+				 * dataset.setValue("Failed test", ((vo.getFailedTests()) != null ?
+				 * Integer.parseInt(vo.getFailedTests()) : 0)); //
+				 * dataset.setValue("No of passed test", // ((vo.getPassedTests()) != null ?
+				 * Integer.parseInt(vo.getPassedTests()) : 0));
+				 * 
+				 * pieSheet.autoSizeColumn(50); JFreeChart myPieChart =
+				 * ChartFactory.createPieChart3D("Report details", dataset, true, true, true);
+				 * 
+				 * int width = 640; int height = 480; float quality = 1; final PiePlot plot =
+				 * (PiePlot) myPieChart.getPlot(); plot.setStartAngle(270);
+				 * plot.setForegroundAlpha(0.60f); plot.setInteriorGap(0.02);
+				 * plot.setLabelGenerator(new StandardPieSectionLabelGenerator(" {2}",
+				 * NumberFormat.getNumberInstance(), NumberFormat.getPercentInstance()));
+				 * 
+				 * ByteArrayOutputStream chart_out = new ByteArrayOutputStream();
+				 * ChartUtilities.writeChartAsJPEG(chart_out, quality, myPieChart, width,
+				 * height);
+				 * 
+				 * 
 				 * File imageFile = new File("E:\\LineChart.png");
 				 * ChartUtilities.saveChartAsJPEG((imageFile), myPieChart, 400, 300);
+				 * 
+				 * BufferedImage bufferedImage = myPieChart.createBufferedImage(width, height);
+				 * saveToFile(bufferedImage, request); int my_picture_id =
+				 * workbook.addPicture(chart_out.toByteArray(), Workbook.PICTURE_TYPE_JPEG);
+				 * chart_out.close(); XSSFDrawing drawing = pieSheet.createDrawingPatriarch();
+				 * ClientAnchor my_anchor = new XSSFClientAnchor(); my_anchor.setCol1(3);
+				 * my_anchor.setRow1(3); XSSFPicture my_picture =
+				 * drawing.createPicture(my_anchor, my_picture_id); my_picture.resize();
+				 * 
+				 * // break;
+				 * 
+				 * ////// -----pie chart end------////
+				 * 
+				 * ///// ----Bar Chart-------///// XSSFSheet barSheet =
+				 * workbook.createSheet("Bar chart"); DefaultCategoryDataset
+				 * my_bar_chart_dataset = new DefaultCategoryDataset(); //// ----Bar Data----///
+				 * 
+				 * String chart_label = "total issues"; double chart_data_issue =
+				 * Double.valueOf(vo.getTotalIssues()); double chart_data_warning =
+				 * Double.valueOf(vo.getTotalWarnings()); double chart_data_error =
+				 * Double.valueOf(vo.getTotalErrors()); // if (chart_label != null) { // for
+				 * (int j = 1; i <= 3; j++) { // if (j == 1) { // chart_data =
+				 * Double.valueOf(vo.getTotalIssues()); // chart_label = "total issues"; // // }
+				 * else if (j == 2) { // chart_data = Double.valueOf(vo.getTotalWarnings()); //
+				 * chart_label = "total warning"; // } else if (j == 3) { // chart_data =
+				 * Double.valueOf(vo.getTotalErrors()); // chart_label = "total errors"; // } //
+				 * // my_bar_chart_dataset.addValue(chart_data, "Bar", chart_label); // } // }
+				 * 
+				 * my_bar_chart_dataset.addValue(chart_data_warning, "Bar", "total warning");
+				 * my_bar_chart_dataset.addValue(chart_data_error, "Bar", "total errors"); /////
+				 * ----end bar chart-----////// JFreeChart BarChartObject =
+				 * ChartFactory.createBarChart("Issue Status", "Total Issues", "Bar",
+				 * my_bar_chart_dataset, PlotOrientation.VERTICAL, true, true, false);
+				 * 
+				 * int BarChartwidht = 640; int BarChartheight = 480; ByteArrayOutputStream
+				 * bar_chart_out = new ByteArrayOutputStream();
+				 * ChartUtilities.writeChartAsPNG(bar_chart_out, BarChartObject, BarChartwidht,
+				 * BarChartheight); int bar_picture_id =
+				 * workbook.addPicture(bar_chart_out.toByteArray(), Workbook.PICTURE_TYPE_PNG);
+				 * chart_out.close(); XSSFDrawing barDrawing =
+				 * barSheet.createDrawingPatriarch(); ClientAnchor bar_anchor = new
+				 * XSSFClientAnchor(); bar_anchor.setCol1(4); bar_anchor.setRow1(5); XSSFPicture
+				 * bar_picture = barDrawing.createPicture(bar_anchor, bar_picture_id);
+				 * bar_picture.resize();
+				 * 
+				 * //// -----end bar chart----/////
 				 */
-				BufferedImage bufferedImage = myPieChart.createBufferedImage(width, height);
-				saveToFile(bufferedImage, request);
-				int my_picture_id = workbook.addPicture(chart_out.toByteArray(), Workbook.PICTURE_TYPE_JPEG);
-				chart_out.close();
-				XSSFDrawing drawing = pieSheet.createDrawingPatriarch();
-				ClientAnchor my_anchor = new XSSFClientAnchor();
-				my_anchor.setCol1(3);
-				my_anchor.setRow1(3);
-				XSSFPicture my_picture = drawing.createPicture(my_anchor, my_picture_id);
-				my_picture.resize();
 
-				// break;
-
-				///// ----Bar Chart-------/////
-				XSSFSheet barSheet = workbook.createSheet("Bar chart");
-				DefaultCategoryDataset my_bar_chart_dataset = new DefaultCategoryDataset();
-				//// ----Bar Data----///
-
-				String chart_label = "total issues";
-				double chart_data_issue = Double.valueOf(vo.getTotalIssues());
-				double chart_data_warning = Double.valueOf(vo.getTotalWarnings());
-				double chart_data_error = Double.valueOf(vo.getTotalErrors());
-//				if (chart_label != null) {
-//					for (int j = 1; i <= 3; j++) {
-//						if (j == 1) {
-//							chart_data = Double.valueOf(vo.getTotalIssues());
-//							chart_label = "total issues";
-//
-//						} else if (j == 2) {
-//							chart_data = Double.valueOf(vo.getTotalWarnings());
-//							chart_label = "total warning";
-//						} else if (j == 3) {
-//							chart_data = Double.valueOf(vo.getTotalErrors());
-//							chart_label = "total errors";
-//						}
-//
-//						my_bar_chart_dataset.addValue(chart_data, "Bar", chart_label);
-//					}
-//				}
-
-				my_bar_chart_dataset.addValue(chart_data_warning, "Bar", "total warning");
-				my_bar_chart_dataset.addValue(chart_data_error, "Bar", "total errors");
-				///// ----end bar chart-----//////
-				JFreeChart BarChartObject = ChartFactory.createBarChart("Issue Status", "Total Issues", "Bar",
-						my_bar_chart_dataset, PlotOrientation.VERTICAL, true, true, false);
-
-				int BarChartwidht = 640;
-				int BarChartheight = 480;
-				ByteArrayOutputStream bar_chart_out = new ByteArrayOutputStream();
-				ChartUtilities.writeChartAsPNG(bar_chart_out, BarChartObject, BarChartwidht, BarChartheight);
-				int bar_picture_id = workbook.addPicture(bar_chart_out.toByteArray(), Workbook.PICTURE_TYPE_PNG);
-				chart_out.close();
-				XSSFDrawing barDrawing = barSheet.createDrawingPatriarch();
-				ClientAnchor bar_anchor = new XSSFClientAnchor();
-				bar_anchor.setCol1(4);
-				bar_anchor.setRow1(5);
-				XSSFPicture bar_picture = barDrawing.createPicture(bar_anchor, bar_picture_id);
-				bar_picture.resize();
-
-				//// -----end bar chart----/////
-
+				/// -----------pie chart and bar chart end--------////
 			}
-		}
+		} /// url end
 
 		XSSFRow header = sheet.createRow(7);
 
@@ -1114,27 +1118,12 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		header.createCell(2).setCellValue("Error Title");
 		header.getCell(2).setCellStyle(style);
 
-		/*
-		 * header.createCell(3).setCellValue("WCAG Principle");
-		 * header.getCell(3).setCellStyle(style);
-		 */
 		header.createCell(3).setCellValue("Error Description");
 		header.getCell(3).setCellStyle(style);
 
 		header.createCell(4).setCellValue("Error Snippet");
 		header.getCell(4).setCellStyle(style);
 
-		// header.createCell(5).setCellValue("Guideline Description");
-		// header.getCell(5).setCellStyle(style);
-
-		/*
-		 * header.createCell(7).setCellValue("WCAG_Sublevel");
-		 * header.getCell(7).setCellStyle(style);
-		 */
-		/*
-		 * header.createCell(8).setCellValue("Sublevel Description");
-		 * header.getCell(8).setCellStyle(style);
-		 */
 		// create data rows
 		int rowCount = 8;
 		List<TenonApiVo> res = new ArrayList<TenonApiVo>();
@@ -1153,18 +1142,9 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 					aRow.createCell(0).setCellValue(result.getStandards());
 					aRow.createCell(1).setCellValue(result.getResultTitle());
 					aRow.createCell(2).setCellValue(result.getErrorTitle());
-
-					// aRow.createCell(3).setCellValue(result.getWCAG_Principle());
 					aRow.createCell(3).setCellValue(result.getErrorDescription());
-
 					aRow.createCell(4).setCellValue(result.getErrorSnippet());
-					// aRow.createCell(5).setCellValue(result.getGuideline_Description());
-
-					// aRow.createCell(7).setCellValue(result.getWCAG_Sublevel());
-					// aRow.createCell(8).setCellValue(result.getSublevel_Description());
-
 				}
-
 			} else {
 				aRow.createCell(0).setCellValue("");
 				aRow.createCell(1).setCellValue("");
@@ -1178,15 +1158,13 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 			}
 		}
 
+	
+
 		// FileOutputStream o = new FileOutputStream(afileName);
 		FileOutputStream fos = new FileOutputStream(new File(filename));
 		workbook.write(fos);
 		fos.close();
 
-		File xls = new File(filename);
-
-		if (xls.createNewFile()) { logger.debug("File is created!"); } else {
-		logger.debug("File already exists."); }
 		try {
 			createPdfFromWorkbook(filename);
 		} catch (IOException e) {
@@ -1194,8 +1172,8 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-		boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
-		isMailSent = true;
+		//boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
+		boolean isMailSent = true;
 		return isMailSent;
 
 	}
@@ -1448,7 +1426,7 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		} else {
 			logger.debug("File already exists.");
 		}
-		
+
 		boolean isMailSent = emailSender.sendMail(filename, workbook, emailId);
 		return isMailSent;
 
@@ -1691,53 +1669,67 @@ public class TenonApiReportServiceImpl implements TenonApiReportService {
 		}
 		return dataset;
 	}
-	
-	public void createPdfFromWorkbook(String filename) throws IOException, DocumentException {
-	        
-        FileInputStream input_document = new FileInputStream(new File(filename));
-        // Read workbook into XSSFWorkbook
-        XSSFWorkbook my_xls_workbook = new XSSFWorkbook(input_document); 
-        // Read worksheet into XSSFSheet
-        XSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0); 
-        // To iterate over the rows
-        Iterator<Row> rowIterator = my_worksheet.iterator();
-        //We will create output PDF document objects at this point
-        com.lowagie.text.Document iText_xlsx_pdf = new com.lowagie.text.Document();
-        PdfWriter.getInstance(iText_xlsx_pdf, new FileOutputStream(filename.replace("xlsx", "pdf")));
-        iText_xlsx_pdf.open();
-        //we have 10 columns in the Excel sheet, so we create a PDF table with 10 columns
-        //Note: There are ways to make this dynamic in nature, if you want to.
-        PdfPTable my_table = new PdfPTable(10);
-   	 	my_table.setWidthPercentage(100);
-        //We will use the object below to dynamically add new data to the table
-        PdfPCell table_cell;
-        //Loop through rows.
-        while(rowIterator.hasNext()) {
-                Row row = rowIterator.next(); 
-                Iterator<org.apache.poi.ss.usermodel.Cell> cellIterator = row.cellIterator();
-                        while(cellIterator.hasNext()) {
-                                org.apache.poi.ss.usermodel.Cell cell = cellIterator.next(); //Fetch CELL
-                                switch(cell.getCellType()) {
-                                case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING:
-                                     table_cell=new PdfPCell(new Phrase(cell.getStringCellValue()));
-                                     table_cell.setColspan(5);
-                                     my_table.addCell(table_cell);
-                                     break;
-                                case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK:
-                                	 table_cell=new PdfPCell(new Phrase(""));
-                                	 table_cell.setColspan(1);
-                                	 my_table.addCell(table_cell);
-                                	 break;
-                                }
-                                //next line
-                        }
 
-        }
-        //Finally add the table to PDF document
-        iText_xlsx_pdf.add(my_table);                       
-        iText_xlsx_pdf.close();                
-        //we created our pdf file..
-        input_document.close(); //close xls
-        
+	public void createPdfFromWorkbook(String filename) throws IOException, DocumentException {
+		
+		File file = new File(filename.replace("xlsx", "pdf"));
+		
+		if(!file.exists()) {
+			FileInputStream input_document = new FileInputStream(new File(filename));
+			// Read workbook into XSSFWorkbook
+			XSSFWorkbook my_xls_workbook = new XSSFWorkbook(input_document);
+			// Read worksheet into XSSFSheet
+			XSSFSheet my_worksheet = my_xls_workbook.getSheetAt(0);
+			// To iterate over the rows
+			Iterator<Row> rowIterator = my_worksheet.iterator();
+			// We will create output PDF document objects at this point
+			com.lowagie.text.Document iText_xlsx_pdf = new com.lowagie.text.Document();
+			PdfWriter.getInstance(iText_xlsx_pdf, new FileOutputStream(filename.replace("xlsx", "pdf")));
+			iText_xlsx_pdf.open();
+			// we have 10 columns in the Excel sheet, so we create a PDF table with 10
+			// columns
+			// Note: There are ways to make this dynamic in nature, if you want to.
+			PdfPTable my_table = new PdfPTable(10);
+			my_table.setWidthPercentage(100);
+			// We will use the object below to dynamically add new data to the table
+			PdfPCell table_cell;
+			// Loop through rows.
+			int count = 0;
+			while (rowIterator.hasNext()) {
+				if (count == 0) {
+					count++;
+					rowIterator.next();
+				}
+				Row row = rowIterator.next();
+				Iterator<org.apache.poi.ss.usermodel.Cell> cellIterator = row.cellIterator();
+				while (cellIterator.hasNext()) {
+					org.apache.poi.ss.usermodel.Cell cell = cellIterator.next(); // Fetch CELL
+					switch (cell.getCellType()) {
+					case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_STRING:
+						table_cell = new PdfPCell(new Phrase(cell.getStringCellValue()));
+						table_cell.setColspan(5);
+						my_table.addCell(table_cell);
+						break;
+					case org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BLANK:
+						table_cell = new PdfPCell(new Phrase(""));
+						table_cell.setColspan(1);
+						my_table.addCell(table_cell);
+						break;
+					}
+					// next line
+				}
+
+			}
+			// Finally add the table to PDF document
+			iText_xlsx_pdf.add(my_table);
+			iText_xlsx_pdf.close();
+			// we created our pdf file..
+			input_document.close(); // close xls
+
+		}
+	}
+
+	public void createSheetMultipleUrl() {
+
 	}
 }

@@ -29,11 +29,35 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"></jsp:include>
-	<c:if test="${empty weburls}">
 
-		<!-- <span id="urlError">HTTP error fetching URL,Status=404.Please
+	<div class="container">
+		<table class="table">
+			<thead>
+				<tr>
+					<th class="col">URL</th>
+					<th class="col">Status</th>
+					<th class="col">Description</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+			<c:forEach items="${urlStatusList}" var="urlStatus">
+				<tr>
+					<td class="row">${urlStatus.url}</td>
+					<td>${urlStatus.status}</td>
+					<td>${urlStatus.description}</td>
+					<td></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</div>
+
+	<!--<c:if test="${empty weburls}"> -->
+
+	<!-- <span id="urlError">HTTP error fetching URL,Status=404.Please
 			enter the valid url.</span> -->
-		<div class="container">
+	<!-- 	<div class="container">
 			<div class="text-center">
 				<strong>Sorry !!! </strong><br>
 				<p>
@@ -52,18 +76,18 @@
 
 		<br>
 
-	</c:if>
-	<c:if test="${not empty weburls}">
+	</c:if>  -->
+	<!--<c:if test="${not empty weburls}">
 
 		<div id="sentence">
 			<b> We have sent you an email with attached report containing the
-				Web accessibility issues . Kindly Please refer it.</b>
+				Web accessibility issues. Kindly Please refer it.</b>
 		</div>
-		<div align="center">
-			<img
+		<div align="center"> -->
+	<!-- <img
 				src="${pageContext.request.contextPath}/static/Images/myPieChart.png"
-				alt="piChartImage" id="pieImage" title="" />
-	</c:if>
+				alt="piChartImage" id="pieImage" title="" /> -->
+	<!--</c:if> -->
 	</div>
 	<br>
 	<br>

@@ -341,5 +341,26 @@ public class EQualityLabsUtil {
 		}
 		return false;
 	}
+	
+	public int ValidateUrl(String domainUrl) throws IOException, EQualityLabsException {
+
+		try {
+			URL u = new URL(domainUrl);
+			HttpURLConnection huc = (HttpURLConnection) u.openConnection();
+			huc.setRequestMethod("GET");
+			huc.connect();
+			int code = huc.getResponseCode();;
+			return code; 
+		}
+
+		catch (UnknownHostException ex) {
+			throw new EQualityLabsException("UnknownHostException:--" + ex.getMessage());
+		} catch (IOException e) {
+			throw new EQualityLabsException("IOException:--" + e.getMessage());
+
+		} catch (Exception exc) {
+			throw new EQualityLabsException("Generic exception " + exc.getMessage());
+		}
+	}
 
 }

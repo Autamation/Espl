@@ -85,12 +85,12 @@ public class EmailSender {
 			
 			DataSource source = new FileDataSource(filename); 
 			mimeBodyPart2.setDataHandler(new DataHandler(source));  
-			mimeBodyPart2.setFileName(filename);  
+			mimeBodyPart2.setFileName(filename.substring(filename.indexOf("report")));  
 			
 			
 			DataSource pdfsource = new FileDataSource(pdfFileName); 
 			mimeBodyPart3.setDataHandler(new DataHandler(pdfsource));  
-			mimeBodyPart3.setFileName(pdfFileName);  
+			mimeBodyPart3.setFileName(pdfFileName.substring(pdfFileName.indexOf("report")));  
 			
 
 			// create the Multipart and add its parts to it

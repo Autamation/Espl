@@ -189,7 +189,7 @@ body {
 <body>
 	<div class="loader-div">
 		<img src="/EQualityLabs/static/Images/loading_gif.gif" width="150" height="100"
-			style="position: absolute; display: block; top: 50%; left: 50%;">
+			style="position: absolute; display: block; top: 45%; left: 45%;">
 		<%-- 	<img src="${pageContext.request.contextPath}/static/Images/35.gif"
 			width="75" height="75"
 			style="position: absolute; display: block; top: 50%; left: 50%"> --%>

@@ -1,11 +1,18 @@
 package com.prakat.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,9 +21,17 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +40,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.java.exception.EQualityLabsException;
@@ -33,6 +49,7 @@ import com.prakat.dao.impl.TenonApiDaoImpl;
 import com.prakat.globalservice.MailService;
 import com.prakat.model.EQualityLabsVo;
 import com.prakat.model.TenonByWCAG;
+import com.prakat.model.UrlValidateStatus;
 import com.prakat.model.UserDetailsVo;
 import com.prakat.model.WaveApiByWCAG;
 import com.prakat.response.ResponseURL;
@@ -41,6 +58,7 @@ import com.prakat.service.impl.TenonApiReportServiceImpl;
 import com.prakat.service.impl.WaveApiReportService;
 import com.prakat.util.AES256EncryptionDecryption;
 import com.prakat.util.EQualityLabsUtil;
+import com.prakat.util.EmailSender;
 
 @Controller
 @SessionAttributes({ "userId", "email", "userName", "user", "loggedInUserType" })
@@ -65,62 +83,165 @@ public class EQualityLabsController {
 	@Autowired
 	WaveApiReportService waveApiService;
 
+	@Autowired
+	private EmailSender emailSender;
+
 	static Logger logger = Logger.getLogger(EQualityLabsController.class.getName());
 
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@RequestMapping(value = "processReqestForFreeuser", method = RequestMethod.POST)
 	public String processFreeUserRequest(HttpServletRequest request, HttpSession session, ModelMap modelMap,
-			HttpServletResponse httpresponse) throws Exception {
+			HttpServletResponse httpresponse,@RequestParam("file") MultipartFile uploadfile) throws Exception {
 		String emailId = (String) session.getAttribute("emailId");
 		/*
 		 * if (emailId==null) { return "login"; }
 		 */
-		String domainUrl = request.getParameter("domainUrl");
-
-		if (util.isValidUrl(domainUrl)) {
-			String tenonApiURL = env.getProperty("tenonApiUrl");
-			String apiKey = env.getProperty("tenonApiAuthorizeKey");
-			String waveApiUrl = env.getProperty("waveApiUrl");
-			String waveApiKey = env.getProperty("waveApiKey");
-
-			UserDetailsVo userDetails = equalityLabsServiceImpl.fetchRegisteredUserDetails(emailId);
-			int userId = userDetails.getUserId();
-			List<TenonByWCAG> tenonApiVos = tenonService.getTenonReportServiceByWCAGForFreeUser(tenonApiURL, domainUrl,
-					apiKey, emailId, userId);
-			// List<WaveApiByWCAG> waveApi=waveApiService.waveApiMethod(waveApiKey,
-			// waveApiUrl,domainUrl,userId);
-
-			for (int i = 0; i <= tenonApiVos.size() - 1; i++) {
-				System.out.println("tenoon api vos isss...!!!" + tenonApiVos.get(i));
-			}
-			if (!tenonApiVos.isEmpty()) {
-
-				logger.debug("size after adding --" + tenonApiVos.size());
-				modelMap.addAttribute("weburls", tenonApiVos);
-			} else {
-				for (TenonByWCAG vo : tenonApiVos) {
-					vo.setTotalErrors(vo.getFailedTests());
-					vo.setTotalErrors(vo.getPassedTests());
-					vo.setTotalErrors(vo.getTotalNoOfTests());
-					tenonApiVos.add(vo);
-				}
-				modelMap.addAttribute("weburls", tenonApiVos);
-			}
-			getTenonreportForFreeUser(modelMap, httpresponse, request, emailId);
+		
+		List<String[]> multipleUrl = new ArrayList<String[]>();
+		if(uploadfile!=null && uploadfile.getOriginalFilename() !=null && !uploadfile.getOriginalFilename().trim().isEmpty()) {
+			InputStream in =  uploadfile.getInputStream();
+			Workbook workbook = new XSSFWorkbook(in);
+			multipleUrl = extractUrlFromWorkbook(workbook);
+		}else {
+			String[] domainUrl = {request.getParameter("domainUrl"),null};
+			multipleUrl.add(domainUrl);
 		}
 
-		else {
-			modelMap.addAttribute("weburls", "");
+		Date exclDate = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_hh_mm_ss");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String dir_path = System.getProperty("user.home") + "\\Documents\\";
+		String filename = dir_path + "report_" + dateFormat.format(exclDate) + ".xlsx";
+		List<UrlValidateStatus> urlStatusList = new ArrayList<UrlValidateStatus>();
+
+		for (int k = 0; k < multipleUrl.size(); k++) {
+			UrlValidateStatus urlStatus = new UrlValidateStatus();
+			int statusCode = util.ValidateUrl(multipleUrl.get(k)[0]);
+			urlStatus.setUrl(multipleUrl.get(k)[0]);
+			urlStatus.setStatusCode(statusCode);
+			if(statusCode == 200) {
+				urlStatus.setStatus("Success");
+				urlStatus.setDescription("Report is available");
+			}else if(statusCode == 404) {
+				urlStatus.setStatus("Failed");
+				urlStatus.setDescription("Invalid URL");
+			}else if(statusCode == 403) {
+				urlStatus.setStatus("Failed");
+				urlStatus.setDescription("Forbidden URL");
+			}
+			if (statusCode == 200) {
+				String tenonApiURL = env.getProperty("tenonApiUrl");
+				String apiKey = env.getProperty("tenonApiAuthorizeKey");
+				/*
+				 * String waveApiUrl = env.getProperty("waveApiUrl"); String waveApiKey =
+				 * env.getProperty("waveApiKey");
+				 */
+
+				UserDetailsVo userDetails = equalityLabsServiceImpl.fetchRegisteredUserDetails(emailId);
+				int userId = userDetails.getUserId();
+				List<TenonByWCAG> tenonApiVos = tenonService.getTenonReportServiceByWCAGForFreeUser(tenonApiURL,
+						multipleUrl.get(k)[0], apiKey, emailId, userId);
+				// List<WaveApiByWCAG> waveApi=waveApiService.waveApiMethod(waveApiKey,
+				// waveApiUrl,domainUrl,userId);
+
+				for (int i = 0; i <= tenonApiVos.size() - 1; i++) {
+					System.out.println("tenoon api vos isss...!!!" + tenonApiVos.get(i));
+				}
+				if (!tenonApiVos.isEmpty()) {
+
+					logger.debug("size after adding --" + tenonApiVos.size());
+					modelMap.addAttribute("weburls", tenonApiVos);
+				} else {
+					for (TenonByWCAG vo : tenonApiVos) {
+						vo.setTotalErrors(vo.getFailedTests());
+						vo.setTotalErrors(vo.getPassedTests());
+						vo.setTotalErrors(vo.getTotalNoOfTests());
+						tenonApiVos.add(vo);
+					}
+					modelMap.addAttribute("weburls", tenonApiVos);
+				}
+				getTenonreportForFreeUser(modelMap, httpresponse, request, emailId, filename,multipleUrl.get(k)[1]);
+			}
+			urlStatusList.add(urlStatus);
+		}
+		modelMap.addAttribute("urlStatusList", urlStatusList);
+//
+//		else {
+//			modelMap.addAttribute("weburls", "");
+//		}
+
+		File file = new File(filename);
+		if (file.exists()) {
+			Workbook emailWorkbook = new XSSFWorkbook(new FileInputStream(file));
+			emailSender.sendMail(filename, emailWorkbook, emailId);
 		}
 
 		return "tenon_report";
 	}
 
-	private void waveApiMethod(String waveApiKey, String waveApiUrl) {
+	private List<String[]> extractUrlFromWorkbook(Workbook workbook) {
+		
+		List<String[]> list = new ArrayList<String[]>();
+		if(workbook !=null && workbook.getNumberOfSheets()!=0) {
+			Sheet sheet = workbook.getSheetAt(0);
+			if(sheet.getLastRowNum() > 0) {
+				for(int i=1;i<=sheet.getLastRowNum();i++) {
+					Row row = sheet.getRow(i);
+					if(row.getCell(0)!=null && row.getCell(0).getStringCellValue()!=null && row.getCell(0).getStringCellValue().length()>0) {
+						String[] data = new String[2];
+						data[0] = row.getCell(0).getStringCellValue();
+						data[1] = row.getCell(1).getStringCellValue();
+						list.add(data);
+					}
+				}
+			}else {
+				return null;
+			}
+		}
+		return list;
+	}
 
-		String urlParameter = "key=" + waveApiKey + "&url=" + waveApiUrl;
+	/*
+	 * private void waveApiMethod(String waveApiKey, String waveApiUrl) {
+	 * 
+	 * String urlParameter = "key=" + waveApiKey + "&url=" + waveApiUrl;
+	 * 
+	 * }
+	 */
+
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		String filename = "URL_INPUT_TEMPLATE.xlsx";
+		String filepath = "C:\\Users\\Prakat-L-055\\Desktop\\";
+		response.setContentType("APPLICATION/OCTET-STREAM");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+		FileInputStream fileInputStream = new FileInputStream(filepath + filename);
+		int i;
+		while ((i = fileInputStream.read()) != -1) {
+			out.write(i);
+		}
+		fileInputStream.close();
+		out.close();
 
 	}
+
+//	public ResponseEntity<InputStreamResource> downloadFile() throws IOException {
+//		  String FILE_PATH = "C:\\Users\\Prakat-L-055\\Desktop\\URL_INPUT_TEMPLATE.xlsx";
+//		 File file = new File(FILE_PATH);
+//	      InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//		
+//		
+//		 return ResponseEntity.ok()
+//		            .header(HttpHeaders.CONTENT_DISPOSITION,
+//		                  "attachment;filename=" + file.getName())
+//		            .contentType(MediaType.APPLICATION_XML_TYPE).contentLength(file.length())
+//		            .body(resource);
+//		
+//		
+//	}
 
 	@RequestMapping(value = "/processprouser", method = RequestMethod.POST)
 	public String proUserPostRequest(HttpServletRequest request, HttpServletResponse response, HttpSession session,
@@ -159,10 +280,10 @@ public class EQualityLabsController {
 	}
 
 	public void getTenonreportForFreeUser(ModelMap modelMap, HttpServletResponse response, HttpServletRequest request,
-			String emailId) throws IOException, InvalidFormatException {
+			String emailId, String filename,String pageName) throws IOException, InvalidFormatException {
 		boolean isMailSent = false;
 		List<TenonByWCAG> tenonApisList = (List<TenonByWCAG>) modelMap.get("weburls");
-		isMailSent = tenonService.CreateWorkBookByWCAGForFreeUser(tenonApisList, request, response, emailId);
+		isMailSent = tenonService.CreateWorkBookByWCAGForFreeUser(tenonApisList, request, response, emailId, filename,pageName);
 		logger.debug("Your excel file has been generated");
 	}
 
